@@ -1,0 +1,18 @@
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary Files
+tmp/
+temp/
+*.swp
+*.swo
+
+# Node modules (just in case)
+node_modules/
+dist/
+build/
