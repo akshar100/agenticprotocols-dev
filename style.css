@@ -236,6 +236,290 @@ footer {
     font-size: 0.9rem;
 }
 
+/* Featured Card & Badge */
+.card.featured-card {
+    border-color: var(--primary-color);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg, #161b22 0%, #1e2633 100%);
+    box-shadow: 0 4px 20px rgba(88, 166, 255, 0.1);
+}
+
+.card.featured-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+.badge {
+    display: inline-block;
+    background-color: rgba(88, 166, 255, 0.15);
+    color: var(--primary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* FDP Details Layout */
+.course-hero {
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.course-hero::after {
+    content: '';
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(88, 166, 255, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.course-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.meta-item .label {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.meta-item .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Detail Section Containers */
+.details-section {
+    margin-bottom: 3.5rem;
+}
+
+.details-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.details-section h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: var(--border-color);
+    margin-left: 1rem;
+}
+
+/* Styled Lists */
+.styled-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.styled-list li {
+    position: relative;
+    padding-left: 1.75rem;
+}
+
+.styled-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* Custom Table Styles */
+.table-container {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    background-color: var(--card-bg);
+}
+
+.custom-table th {
+    background-color: rgba(48, 54, 61, 0.5);
+    color: #fff;
+    font-weight: 600;
+    padding: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.custom-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.custom-table tr:last-child td {
+    border-bottom: none;
+}
+
+.custom-table tr:hover td {
+    background-color: rgba(88, 166, 255, 0.02);
+}
+
+/* Accordion for Day-wise Syllabus */
+.accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.accordion-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+
+.accordion-item[open] {
+    border-color: var(--primary-color);
+}
+
+.accordion-summary {
+    padding: 1.25rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background-color 0.2s;
+}
+
+.accordion-summary:hover {
+    background-color: rgba(48, 54, 61, 0.3);
+}
+
+.accordion-summary::-webkit-details-marker {
+    display: none;
+}
+
+.accordion-summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    transition: transform 0.3s ease;
+}
+
+.accordion-item[open] .accordion-summary::after {
+    content: '−';
+    color: var(--primary-color);
+}
+
+.accordion-content {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background-color: rgba(13, 17, 23, 0.4);
+}
+
+.accordion-content h3 {
+    margin: 1.25rem 0 0.75rem 0;
+    color: #fff;
+    font-size: 1.05rem;
+}
+
+.accordion-content h3:first-of-type {
+    margin-top: 0;
+}
+
+/* Day Theme styling */
+.day-theme {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    font-weight: normal;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+/* Logistics Checklist */
+.checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.checklist-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.checklist-card h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.checklist-item input[type="checkbox"] {
+    margin-top: 0.25rem;
+    accent-color: var(--accent-color);
+    cursor: pointer;
+}
+
+.checklist-item label {
+    cursor: pointer;
+    line-height: 1.4;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero h1 {
@@ -248,6 +532,15 @@ footer {
     }
     
     nav ul {
+        gap: 1rem;
+    }
+
+    .course-hero {
+        padding: 2rem 1.25rem;
+    }
+    
+    .course-meta {
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
 }

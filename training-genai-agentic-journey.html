@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative AI & Agentic AI: A Hands-on Journey - Agentic Protocols</title>
+    <meta name="description" content="A comprehensive 5-day hands-on FDP on Generative AI & Agentic AI hosted by Manipal University. Master LLM building, LangGraph, multi-agent workflows, and AI research tools.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="training.html" class="active">Training</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="training.html" style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Training Material
+            </a>
+        </div>
+
+        <section class="course-hero" id="hero-section">
+            <span class="badge">Faculty Development Program</span>
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 1rem; line-height: 1.2;">
+                Generative AI & Agentic AI — A Hands-on Journey
+            </h1>
+            <p style="font-size: 1.15rem; color: var(--secondary-color); max-width: 800px; margin-bottom: 1.5rem;">
+                An intensive, in-person 5-day hands-on lab exploring the foundations of large language models, application building using free and open SDKs, multi-agent frameworks, and academic research acceleration.
+            </p>
+            <div class="course-meta">
+                <div class="meta-item">
+                    <span class="label">Host Institution</span>
+                    <span class="value">Manipal University, India</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Duration</span>
+                    <span class="value">5 Full Days</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Daily Timing</span>
+                    <span class="value">10:00 AM – 5:00 PM</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Mode</span>
+                    <span class="value">In-person, Hands-on Lab</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="details-section" id="objectives">
+            <h2>Program Objectives</h2>
+            <p style="margin-bottom: 1rem; color: var(--secondary-color);">By the end of this 5-day FDP, participants will be able to:</p>
+            <ul class="styled-list">
+                <li>Explain the foundations of Generative AI, transformers, and large language models.</li>
+                <li>Build LLM-powered applications using free APIs, open-source SDKs, and local models.</li>
+                <li>Design, implement, and evaluate agentic AI systems using modern frameworks (LangGraph, CrewAI, AutoGen).</li>
+                <li>Apply AI tools (NotebookLM, Overleaf + AI assistants) to accelerate research and academic writing.</li>
+                <li>Understand responsible AI practices, privacy laws, and deploy AI applications on free platforms.</li>
+                <li>Complete a capstone mini-project demonstrating end-to-end practical AI engineering skills.</li>
+            </ul>
+        </section>
+
+        <section class="details-section" id="audience-prereqs">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div>
+                    <h2 style="font-size: 1.4rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Target Audience</h2>
+                    <p style="color: var(--text-color);">
+                        This program is designed for <strong>faculty members, researchers, students, and industry professionals</strong> who wish to transition from theoretical understanding to building live, production-ready AI applications.
+                    </p>
+                </div>
+                <div>
+                    <h2 style="font-size: 1.4rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Prerequisites</h2>
+                    <p style="color: var(--text-color);">
+                        Basic familiarity with the <strong>Python programming language</strong> (loops, functions, and elementary libraries) and a laptop with stable internet access are required for hands-on sessions.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="details-section" id="time-structure">
+            <h2>Daily Time Structure</h2>
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Slot</th>
+                            <th>Time</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Session 1</strong></td>
+                            <td>10:00 AM – 11:15 AM</td>
+                            <td>75 min</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: var(--secondary-color); font-weight: 500;">Tea Break</span></td>
+                            <td>11:15 AM – 11:30 AM</td>
+                            <td>15 min</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session 2</strong></td>
+                            <td>11:30 AM – 1:00 PM</td>
+                            <td>75 min</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: var(--secondary-color); font-weight: 500;">Lunch Break</span></td>
+                            <td>1:00 PM – 2:00 PM</td>
+                            <td>60 min</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session 3</strong></td>
+                            <td>2:00 PM – 3:15 PM</td>
+                            <td>75 min</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: var(--secondary-color); font-weight: 500;">Tea Break</span></td>
+                            <td>3:15 PM – 3:30 PM</td>
+                            <td>15 min</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session 4</strong></td>
+                            <td>3:30 PM – 5:00 PM</td>
+                            <td>75 min</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="details-section" id="setup-guide">
+            <h2>Pre-FDP Setup Guide</h2>
+            <p style="color: var(--secondary-color); margin-bottom: 1.5rem;">
+                Participants must complete the following setup instructions <strong>before Day 1</strong>. A pre-FDP virtual orientation (1 hour) will be scheduled to help verify developer environments.
+            </p>
+
+            <h3 style="color: #fff; margin-bottom: 0.75rem; font-size: 1.15rem;">1. Accounts to Create (All Free)</h3>
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Purpose</th>
+                            <th>Sign Up URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Google Account</strong></td>
+                            <td>Colab, NotebookLM, Google AI Studio (Gemini API)</td>
+                            <td><a href="https://accounts.google.com" target="_blank" rel="noopener noreferrer">accounts.google.com</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hugging Face</strong></td>
+                            <td>Free models, datasets, Spaces, Inference API</td>
+                            <td><a href="https://huggingface.co" target="_blank" rel="noopener noreferrer">huggingface.co</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Overleaf</strong></td>
+                            <td>LaTeX paper writing (free tier)</td>
+                            <td><a href="https://www.overleaf.com" target="_blank" rel="noopener noreferrer">overleaf.com</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>GitHub</strong></td>
+                            <td>Source control, free code hosting</td>
+                            <td><a href="https://github.com" target="_blank" rel="noopener noreferrer">github.com</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Streamlit Community Cloud</strong></td>
+                            <td>Free app deployment platform</td>
+                            <td><a href="https://streamlit.io/cloud" target="_blank" rel="noopener noreferrer">streamlit.io/cloud</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>GitHub Copilot</strong></td>
+                            <td>Optional, for code suggestions in VS Code</td>
+                            <td><a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">github.com/features/copilot</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="color: #fff; margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem;">2. Local Software Installation</h3>
+            <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; font-size: 0.95rem;">
+                <ul style="list-style-type: none; display: flex; flex-direction: column; gap: 1rem; padding: 0;">
+                    <li>
+                        <strong>Python 3.10+</strong> — Install Python from the official downloads page: 
+                        <a href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer">python.org/downloads/</a>
+                    </li>
+                    <li>
+                        <strong>VS Code</strong> — IDE of choice for coding: 
+                        <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">code.visualstudio.com/</a>
+                    </li>
+                    <li>
+                        <strong>Git</strong> — Version control tool: 
+                        <a href="https://git-scm.com/" target="_blank" rel="noopener noreferrer">git-scm.com/</a>
+                    </li>
+                    <li>
+                        <strong>Ollama</strong> — Running local models. Pull lightweight models after install:
+                        <code style="background-color: var(--bg-color); padding: 0.2rem 0.4rem; border-radius: 4px; display: block; margin-top: 0.5rem; font-family: monospace;">ollama pull llama3.2:3b && ollama pull phi3:mini</code>
+                    </li>
+                    <li>
+                        <strong>Python packages</strong> — Install these libraries in a fresh virtual environment (<code style="background-color: var(--bg-color); padding: 0.1rem 0.3rem; border-radius: 4px; font-family: monospace;">venv</code>):
+                        <pre style="background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; margin-top: 0.5rem; overflow-x: auto; font-family: monospace; font-size: 0.85rem; color: #fff;">pip install jupyter pandas numpy matplotlib scikit-learn \
+            langchain langchain-google-genai langgraph \
+            crewai pyautogen \
+            chromadb streamlit gradio \
+            python-dotenv requests</pre>
+                    </li>
+                </ul>
+            </div>
+
+            <h3 style="color: #fff; margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem;">3. Web Tools to Bookmark</h3>
+            <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.95rem;">
+                <div>
+                    <strong style="color: #fff; display: block; margin-bottom: 0.5rem;">Web interfaces:</strong>
+                    <ul style="padding-left: 1.25rem;">
+                        <li><a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer">ChatGPT</a></li>
+                        <li><a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude AI</a></li>
+                        <li><a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Gemini Chat</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <strong style="color: #fff; display: block; margin-bottom: 0.5rem;">Developer Portals:</strong>
+                    <ul style="padding-left: 1.25rem;">
+                        <li><a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer">Google AI Studio</a></li>
+                        <li><a href="https://huggingface.co/spaces" target="_blank" rel="noopener noreferrer">Hugging Face Spaces</a></li>
+                        <li><a href="https://calm-sand-0f2fbf80f.7.azurestaticapps.net" target="_blank" rel="noopener noreferrer">Transformer Visualizer</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <strong style="color: #fff; display: block; margin-bottom: 0.5rem;">Research Systems:</strong>
+                    <ul style="padding-left: 1.25rem;">
+                        <li><a href="https://notebooklm.google.com" target="_blank" rel="noopener noreferrer">Google NotebookLM</a></li>
+                        <li><a href="https://www.semanticscholar.org" target="_blank" rel="noopener noreferrer">Semantic Scholar</a></li>
+                        <li><a href="https://www.connectedpapers.com" target="_blank" rel="noopener noreferrer">Connected Papers</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="details-section" id="agenda">
+            <h2>Day-Wise Detailed Agenda</h2>
+            <p style="color: var(--secondary-color); margin-bottom: 1.5rem;">
+                Click on each day to expand the detailed sessions, labs, and themes.
+            </p>
+
+            <div class="accordion">
+                <!-- Day 1 -->
+                <details class="accordion-item" open id="day1">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Day 1 — Foundations of Generative AI</strong>
+                            <span class="day-theme">Theme: Setup, Python warm-up, transformer intuition, prompt engineering. (Guided)</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Session 1 — Welcome, Setup Verification & Python Warm-up</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Welcome address, FDP overview, course expectations.</li>
+                            <li>Environment verification (Colab login, Ollama running, package dependencies verified).</li>
+                            <li><strong>Python warm-up in Google Colab:</strong>
+                                <ul style="padding-left: 1.25rem; margin-top: 0.25rem;">
+                                    <li>NumPy & pandas essentials for working with tensors and dataframes.</li>
+                                    <li>Vectors, matrices, dot products — the mathematical groundwork behind embeddings.</li>
+                                    <li>Data visualization and plotting using matplotlib.</li>
+                                    <li>Quick scikit-learn refresher (train/test splits, running basic classifiers).</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h3>Session 2 — The AI/ML/DL/GenAI Landscape</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>AI vs. ML vs. Deep Learning vs. Generative AI: clear structural boundaries.</li>
+                            <li>Discriminative models vs. generative models.</li>
+                            <li>A brief history of sequence modeling: from RNNs and LSTMs to the modern Transformer.</li>
+                            <li>Survey of contemporary generative modalities (text, image, audio, code, video).</li>
+                            <li>Cross-model demonstration: comparing ChatGPT, Claude, and Gemini on identical prompts.</li>
+                        </ul>
+
+                        <h3>Session 3 — Transformer Architecture Deep-Dive</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Tokens, embeddings, and positional encoding mechanisms.</li>
+                            <li>Self-attention and multi-head attention: an intuitive mathematical explanation.</li>
+                            <li>Architecture types: Encoder-only (BERT), decoder-only (GPT), and encoder-decoder (T5).</li>
+                            <li><strong>Live demo: Transformer Visualizer</strong> (<a href="https://calm-sand-0f2fbf80f.7.azurestaticapps.net" target="_blank" rel="noopener noreferrer">calm-sand-0f2fbf80f.7.azurestaticapps.net</a>):
+                                <ul style="padding-left: 1.25rem; margin-top: 0.25rem;">
+                                    <li>Visual walkthrough of attention weights and layer-by-layer tensor flows.</li>
+                                    <li>Hands-on exploration of visualizer states by participants on their laptops.</li>
+                                </ul>
+                            </li>
+                            <li>How GPT-style models generate text: next-token prediction, sampling methods, temperature, and top-p.</li>
+                        </ul>
+
+                        <h3>Session 4 — Prompt Engineering Hands-on</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Anatomy of a production prompt: assigning roles, defining context, tasks, formatting, and constraints.</li>
+                            <li>Patterns: zero-shot, few-shot, chain-of-thought, role prompting, and the ReAct (Reasoning + Acting) loop.</li>
+                            <li>Hands-on exercises in free web UIs (ChatGPT, Claude, Gemini):
+                                <ul style="padding-left: 1.25rem; margin-top: 0.25rem;">
+                                    <li>Summarization, text classification, semantic extraction, reasoning, and code generation.</li>
+                                </ul>
+                            </li>
+                            <li>Prompt comparison lab: running matching prompts across 3 models to analyze differences.</li>
+                            <li><strong>Daily reflection</strong> (10 min quiz/feedback) & preview of Day 2 topics.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- Day 2 -->
+                <details class="accordion-item" id="day2">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Day 2 — LLMs, APIs & Application Building</strong>
+                            <span class="day-theme">Theme: From understanding LLMs to building real applications. (Guided)</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Session 1 — Inside an LLM</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Tokenization in depth (BPE, WordPiece) — hands-on usage with Hugging Face <code style="font-family: monospace;">tokenizers</code> library.</li>
+                            <li>Embeddings: mapping words, sentences, and full documents to vector space.</li>
+                            <li>Hands-on script: generating sentence embeddings with <code style="font-family: monospace;">sentence-transformers</code> and visualizing clusters using PCA/t-SNE.</li>
+                            <li>Pre-training vs. fine-tuning vs. RLHF (conceptual structures).</li>
+                            <li>Context windows, latency issues, and API pricing/cost considerations.</li>
+                        </ul>
+
+                        <h3>Session 2 — Hugging Face Ecosystem</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Hugging Face Hub tour: searching models, datasets, Spaces, and analyzing leaderboards.</li>
+                            <li>Loading and running lightweight models locally using the <code style="font-family: monospace;">transformers</code> library.</li>
+                            <li>Hugging Face Inference API (free tier) — making calls to hosted models from Python scripts.</li>
+                            <li>Mini-lab: building sentiment analysis, text classification, summarization, and translation pipelines.</li>
+                        </ul>
+
+                        <h3>Session 3 — LangChain with Free LLMs</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>LangChain core orchestration concepts: models, prompts templates, output parsers, and chains.</li>
+                            <li><strong>Google AI Studio (Gemini API):</strong> Generate a free API key and establish your first API call.</li>
+                            <li><strong>Ollama:</strong> Interfacing with local Llama 3.2 / Phi-3 models from LangChain code.</li>
+                            <li>Building code to switch seamlessly between cloud APIs (Gemini) and local endpoints (Ollama).</li>
+                            <li>Structuring model outputs using Pydantic schemas.</li>
+                        </ul>
+
+                        <h3>Session 4 — Build a Chatbot</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Maintaining conversation memory in LangChain.</li>
+                            <li>Building a sleek interactive chatbot user interface in **Streamlit**.</li>
+                            <li>Adding system instructions, custom personas, and guardrails to filter inputs/outputs.</li>
+                            <li>Deploying the chatbot application on local developer machines.</li>
+                            <li><strong>Daily reflection</strong> (10 min quiz/feedback) & preview of Day 3 topics.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- Day 3 -->
+                <details class="accordion-item" id="day3">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Day 3 — Agentic AI: Concepts & Frameworks</strong>
+                            <span class="day-theme">Theme: Beyond chat — agents that plan, use tools, and reason. (Semi-guided)</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Session 1 — What is Agentic AI?</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Moving beyond chat interfaces: planning, reasoning, tool-use, stateful memory, and self-reflection.</li>
+                            <li>Anatomy of a standalone agent: LLM brain + tool definitions + memory states + control loop.</li>
+                            <li>ReAct (Reason + Action) loop pattern explained step-by-step.</li>
+                            <li>Comparing architectural paradigms: Single-agent vs. multi-agent systems.</li>
+                            <li>When NOT to use agents (cost structures, accuracy thresholds, latency limitations).</li>
+                        </ul>
+
+                        <h3>Session 2 — Agent Frameworks Tour</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li><strong>LangGraph:</strong> Graph-based state orchestration and cycle management (deep code walkthrough).</li>
+                            <li><strong>CrewAI:</strong> Role-based collaborative multi-agent architecture.</li>
+                            <li><strong>AutoGen:</strong> Conversational, event-driven multi-agent framework patterns.</li>
+                            <li>Comparison framework: selecting the correct orchestrator for specific problem spaces.</li>
+                            <li>Hands-on: building the same execution task in two different frameworks to compare design.</li>
+                        </ul>
+
+                        <h3>Session 3 — Hands-on: Build a Research Agent</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Defining agent scope: "Given a research topic, query for papers, scrape details, and output summaries."</li>
+                            <li>Integrating API tools: DuckDuckGo search library, Wikipedia API, and arXiv academic query.</li>
+                            <li>Constructing the agent graph using LangGraph & free Gemini API keys.</li>
+                            <li>Iterative refinement: adding persistence memory, error handling boundaries, and retry limits.</li>
+                        </ul>
+
+                        <h3>Session 4 — Agent Design Patterns & Evaluation</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Design patterns: planner-executor, agentic reflection, human-in-the-loop (HITL), and supervisor control.</li>
+                            <li>Evaluating agent behaviors: execution trajectory quality, tool invocation accuracy, final answers verification.</li>
+                            <li>Hands-on: adding logging hooks to trace and evaluate the research agent's steps.</li>
+                            <li><strong>Daily reflection</strong> (10 min quiz/feedback) & preview of Day 4 topics.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- Day 4 -->
+                <details class="accordion-item" id="day4">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Day 4 — AI for Research & Academia</strong>
+                            <span class="day-theme">Theme: Practical AI workflows for researchers and academic authors. (Semi-guided)</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Session 1 — NotebookLM for Research</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>What NotebookLM is and why it represents a paradigm shift for academic study.</li>
+                            <li>Importing source material: PDFs, web URLs, Google Docs, and YouTube transcripts.</li>
+                            <li>Synthesizing questions with source citation (eliminating hallucinations).</li>
+                            <li>Generating structured study guides, briefings, FAQs, and conceptual mind maps.</li>
+                            <li><strong>Audio Overviews:</strong> Creating interactive podcast-style audio summaries from paper collections.</li>
+                            <li>Hands-on: building a personalized notebook index around 5 academic papers in participants' fields.</li>
+                            <li>Best practices: recognizing source quality constraints and boundary thresholds.</li>
+                        </ul>
+
+                        <h3>Session 2 — Writing Papers with Overleaf + AI</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Overleaf foundation: setting up projects, editing templates, compiler errors, and collaboration options.</li>
+                            <li>Selecting appropriate academic templates (IEEE, ACM, Springer).</li>
+                            <li>LaTeX syntax essential overview: headings, math equations, tables, figures, and BibTeX citations.</li>
+                            <li><strong>AI-Assisted LaTeX Workflow:</strong>
+                                <ul style="padding-left: 1.25rem; margin-top: 0.25rem;">
+                                    <li>Generating structural outlines with LLMs.</li>
+                                    <li>Paragraph editing for academic tone, clarity, and conciseness.</li>
+                                    <li>Grammar checking and style adjustments.</li>
+                                    <li>Converting DOIs directly into BibTeX references.</li>
+                                    <li>Translating descriptive text into clean LaTeX math equations.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Ethics:</strong> AI disclosures, plagiarism checks, journal publisher policies on LLM usage.</li>
+                            <li>Hands-on: drafting a 1-page paper stub using the integrated workflow.</li>
+                        </ul>
+
+                        <h3>Session 3 — RAG over Personal Research Corpus</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>RAG (Retrieval-Augmented Generation) concepts: Why it's a necessity for searching internal documents.</li>
+                            <li>Data pipeline stages: chunking strategies → vector embedding → storage → query retrieval → LLM generation.</li>
+                            <li>Building a script with LangChain + <strong>ChromaDB</strong> (local vector database) + Gemini API.</li>
+                            <li>Hands-on: ingesting private PDFs, querying contents locally, and printing outputs with citations.</li>
+                        </ul>
+
+                        <h3>Session 4 — End-to-End Research Workflow Lab</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Integrated lab pipeline: NotebookLM (discovery) → RAG (deep query) → Overleaf (drafting) → AI assistants (polishing).</li>
+                            <li>Participants work on compiling a brief, structured research note (1–2 pages).</li>
+                            <li>Conducting peer-reviews in pairs to evaluate flow and citation accuracy.</li>
+                            <li><strong>Daily reflection</strong> (10 min quiz/feedback) & preview of Day 5 project guidelines.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- Day 5 -->
+                <details class="accordion-item" id="day5">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Day 5 — Advanced Topics, Ethics & Capstone</strong>
+                            <span class="day-theme">Theme: Multi-agent systems, responsible AI, deployment, capstone showcase. (Exploratory)</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Session 1 — Multi-Agent Systems & the LLM Council Pattern</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Why transition to multiple agents? Exploring task decomposition, specialization, and group debate.</li>
+                            <li>Architectural typologies: hierarchical (supervisor control), collaborative (peer-to-peer), and competitive (debate).</li>
+                            <li><strong>LLM Council Pattern:</strong> Employing multiple LLMs to evaluate, critique, and vote on outputs to improve quality.</li>
+                            <li>Hands-on demonstration: setting up a 3-agent council utilizing cloud Gemini, local Ollama (Llama 3.2), and local Ollama (Phi-3).</li>
+                        </ul>
+
+                        <h3>Session 2 — Responsible AI & Guardrails</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Algorithmic bias, fairness, and toxic pattern mitigation in LLMs.</li>
+                            <li>Hallucination: underlying causes, detection frameworks, and technical mitigation.</li>
+                            <li>Live demonstration of security exploits: prompt injections and model jailbreaks.</li>
+                            <li>Implementing guardrail scripts: validating inputs/outputs, content filters, and strict allow-lists.</li>
+                            <li>LLM evaluation methodologies: assessing accuracy, groundedness, toxicity, latency, and operational cost.</li>
+                            <li>Regulatory & privacy context: India's DPDP Act and an overview of the EU AI Act.</li>
+                            <li>Academic ethics: guidelines on AI authorship disclosure, plagiarism checks, and peer-review policies.</li>
+                        </ul>
+
+                        <h3>Session 3 — Deployment on Free Platforms</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Packaging Python applications for user distribution.</li>
+                            <li><strong>Streamlit Community Cloud:</strong> Deploying the interactive chatbot directly from a GitHub repository.</li>
+                            <li><strong>Hugging Face Spaces:</strong> Packaging and launching Gradio interfaces onto Hugging Face.</li>
+                            <li>Best practices: developer secrets management, API rate limiting, and basic usage monitoring.</li>
+                            <li>Capstone presentation polish (final 30 minutes in groups).</li>
+                        </ul>
+
+                        <h3>Session 4 — Capstone Showcase & Closing</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li><strong>Capstone showcase:</strong> Live mini-project presentations (3–5 min each, in teams of 2–3).</li>
+                            <li>Facilitator and peer critique/feedback sessions.</li>
+                            <li>Roadmap for continued learning: libraries, communities, and conferences.</li>
+                            <li>FDP feedback survey.</li>
+                            <li><strong>Certificate distribution ceremony</strong> and closing addresses.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section class="details-section" id="tools-used">
+            <h2>Tools & SDKs Used (All Free)</h2>
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Tool / SDK</th>
+                            <th>Free?</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>LLM Chat (Web)</strong></td>
+                            <td>ChatGPT, Claude, Gemini</td>
+                            <td>Yes</td>
+                            <td>Using free web tier interfaces</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LLM API</strong></td>
+                            <td>Google AI Studio (Gemini API)</td>
+                            <td>Yes</td>
+                            <td>Generous developer free tier key</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LLM API</strong></td>
+                            <td>Hugging Face Inference API</td>
+                            <td>Yes</td>
+                            <td>Access thousands of open-source models for free</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Local LLM</strong></td>
+                            <td>Ollama (Llama 3.2, Phi-3)</td>
+                            <td>Yes</td>
+                            <td>Runs model queries locally on consumer laptops</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Orchestration</strong></td>
+                            <td>LangChain & LangGraph</td>
+                            <td>Yes</td>
+                            <td>Open-source standard orchestration libraries</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-Agent</strong></td>
+                            <td>CrewAI & AutoGen</td>
+                            <td>Yes</td>
+                            <td>Open-source framework for multi-agent workflows</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ML Model Hub</strong></td>
+                            <td>Hugging Face Hub</td>
+                            <td>Yes</td>
+                            <td>Hub hosting models, datasets, and demos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Interactive Notebooks</strong></td>
+                            <td>Google Colab</td>
+                            <td>Yes</td>
+                            <td>Free web-hosted Jupyter environments with CPU/GPU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vector Store</strong></td>
+                            <td>ChromaDB</td>
+                            <td>Yes</td>
+                            <td>Open-source, local vector database</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UI & App Prototyping</strong></td>
+                            <td>Streamlit & Gradio</td>
+                            <td>Yes</td>
+                            <td>Fast, Python-only UI development libraries</td>
+                        </tr>
+                        <tr>
+                            <td><strong>App Deployment</strong></td>
+                            <td>Streamlit Cloud & Hugging Face Spaces</td>
+                            <td>Yes</td>
+                            <td>Free online hosting for streamlit/gradio apps</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Research & Writing</strong></td>
+                            <td>NotebookLM, Overleaf</td>
+                            <td>Yes</td>
+                            <td>Free source research tool and online LaTeX editor</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Academia Assistants</strong></td>
+                            <td>Semantic Scholar, Connected Papers</td>
+                            <td>Yes</td>
+                            <td>Literature search engines and mapping tools</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visualizations</strong></td>
+                            <td>Transformer Visualizer</td>
+                            <td>Yes</td>
+                            <td>Interactive attention visualizer at <a href="https://calm-sand-0f2fbf80f.7.azurestaticapps.net" target="_blank" rel="noopener noreferrer">calm-sand-0f2fbf80f.7.azurestaticapps.net</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="details-section" id="assessment-certification">
+            <h2>Assessment & Certification</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.75rem; font-size: 1.1rem;">Daily Assessments</h3>
+                    <p style="font-size: 0.95rem; color: var(--secondary-color); line-height: 1.5;">
+                        At the end of each day (Sessions 4), participants complete a 10-minute daily reflection quiz via Google Forms. It covers 5–7 multiple-choice or short-answer questions. The purpose is to reinforce learning and track gaps.
+                    </p>
+                </div>
+                <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.75rem; font-size: 1.1rem;">Capstone Mini-Project</h3>
+                    <p style="font-size: 0.95rem; color: var(--secondary-color); line-height: 1.5;">
+                        Developed individually or in groups of 2–3. Options include:
+                    </p>
+                    <ol style="font-size: 0.9rem; margin-top: 0.5rem; padding-left: 1.25rem; color: var(--text-color);">
+                        <li><strong>Domain Chatbot:</strong> RAG assistant for specific subjects.</li>
+                        <li><strong>Research Agent:</strong> Multi-step paper survey agent.</li>
+                        <li><strong>TA Agent:</strong> Automated quiz & rubric generator.</li>
+                        <li><strong>Multi-Agent Workflow:</strong> Workflows using CrewAI/LangGraph.</li>
+                    </ol>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-color);">
+                        <strong>Deliverables:</strong> Working GitHub repository with a detailed README and a 3-5 minute live demonstration on Day 5.
+                    </p>
+                </div>
+                <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.75rem; font-size: 1.1rem;">Certificate Eligibility</h3>
+                    <p style="font-size: 0.95rem; color: var(--secondary-color); line-height: 1.5;">
+                        Certificates of completion will be issued to participants who meet the following requirements:
+                    </p>
+                    <ul style="font-size: 0.9rem; margin-top: 0.5rem; padding-left: 1.25rem; color: var(--text-color);">
+                        <li>Maintain at least 90% attendance (4.5 of 5 days).</li>
+                        <li>Submit at least 4 of the daily reflections.</li>
+                        <li>Deliver and present their Capstone mini-project.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="details-section" id="recommended-reading">
+            <h2>Recommended Reading & Continued Learning</h2>
+            <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; font-size: 0.95rem;">
+                <div>
+                    <h3 style="color: #fff; font-size: 1rem; margin-bottom: 0.75rem;">Books & Guides</h3>
+                    <ul style="padding-left: 1.25rem; color: var(--secondary-color);">
+                        <li><em>Hands-On Large Language Models</em> by Jay Alammar & Maarten Grootendorst</li>
+                        <li><em>AI Engineering</em> by Chip Huyen</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #fff; font-size: 1rem; margin-bottom: 0.75rem;">Free Courses & Blogs</h3>
+                    <ul style="padding-left: 1.25rem; color: var(--secondary-color);">
+                        <li>DeepLearning.AI Short Developer Courses</li>
+                        <li>Hugging Face NLP & Agents Course</li>
+                        <li>Blogs by Jay Alammar, Lilian Weng, Simon Willison</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #fff; font-size: 1rem; margin-bottom: 0.75rem;">Key Research Papers</h3>
+                    <ul style="padding-left: 1.25rem; color: var(--secondary-color);">
+                        <li><em>Attention Is All You Need</em> (Transformer foundation)</li>
+                        <li><em>ReAct: Synergizing Reasoning and Acting in Language Models</em></li>
+                        <li><em>RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP</em></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="details-section" id="logistics">
+            <h2>Logistics Checklist (for Organizers)</h2>
+            <div class="checklist-grid">
+                <div class="checklist-card">
+                    <h3>Infrastructure</h3>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="facility" name="facility">
+                        <label for="facility">Seminar hall with projector, blackboard/whiteboard, and stable electricity connection.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="power" name="power">
+                        <label for="power">Dedicated power outlets at every desk to keep laptops charged during active lab work.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="wifi" name="wifi">
+                        <label for="wifi">Reliable shared Wi-Fi network (≥ 50 Mbps throughput) with capacity for all participants.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="hotspots" name="hotspots">
+                        <label for="hotspots">Backup mobile internet hotspots in case of primary Wi-Fi outages.</label>
+                    </div>
+                </div>
+
+                <div class="checklist-card">
+                    <h3>Pre-FDP Prep</h3>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="orientation" name="orientation">
+                        <label for="orientation">Pre-FDP setup orientation webinar scheduled 3–5 days prior to training start.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="repo" name="repo">
+                        <label for="repo">Shared GitHub repository populated with slides, notebooks, reference scripts, and test datasets.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="submissions" name="submissions">
+                        <label for="submissions">Google Drive folders or LMS set up to collect daily reflections and capstone project repos.</label>
+                    </div>
+                </div>
+
+                <div class="checklist-card">
+                    <h3>Administration & Hospitality</h3>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="catering" name="catering">
+                        <label for="catering">Arrangements for morning/afternoon tea, refreshments, and lunch catering.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="badges" name="badges">
+                        <label for="badges">Printed participant badges, signs for directions, and hard-copy agenda handouts.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="certs" name="certs">
+                        <label for="certs">Digital templates for certificates of participation and completion approved.</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Agentic Protocols. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
