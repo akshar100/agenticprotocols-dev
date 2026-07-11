@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-Day Immersive Agentic AI Bootcamp - Agentic Protocols</title>
+    <meta name="description" content="An intensive, 1-day hands-on immersive bootcamp on Agentic AI designed by Akshar Prabhu Desai. Master ReAct pattern, tool integration, LangGraph orchestration, and multi-agent workflows.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="training.html" class="active">Training</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="training.html" style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Training Material
+            </a>
+        </div>
+
+        <section class="course-hero" id="hero-section">
+            <span class="badge">Immersive Bootcamp</span>
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 1rem; line-height: 1.2;">
+                1-Day Immersive Agentic AI Bootcamp
+            </h1>
+            <p style="font-size: 1.15rem; color: var(--secondary-color); max-width: 800px; margin-bottom: 1.5rem;">
+                A fast-paced, high-intensity 1-day developer bootcamp focused entirely on building, orchestrating, and deploying autonomous AI agents. Go from basic API scripting to multi-agent stateful orchestration.
+            </p>
+            <div class="course-meta">
+                <div class="meta-item">
+                    <span class="label">Designed By</span>
+                    <span class="value"><a href="https://aksharpd.com" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); border-bottom: 1px dashed var(--primary-color);">Akshar Prabhu Desai</a></span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Duration</span>
+                    <span class="value">1 Full Day</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Daily Timing</span>
+                    <span class="value">9:30 AM – 5:30 PM</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Mode</span>
+                    <span class="value">Hands-on Code Lab</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="info-note" id="curriculum-notice">
+            <strong>Important Notice:</strong> We do not host these bootcamps directly. This syllabus is shared as an ideal reference curriculum designed by industry experts. Trainers, educators, and organizations are welcome to adopt, adapt, and deploy this program for their teams.
+        </div>
+
+        <section class="details-section" id="objectives">
+            <h2>Program Objectives</h2>
+            <p style="margin-bottom: 1rem; color: var(--secondary-color);">By the end of this intensive day, participants will be able to:</p>
+            <ul class="styled-list">
+                <li>Understand the paradigm shift from prompt engineering to agentic workflows.</li>
+                <li>Design and implement autonomous agent control loops using the ReAct (Reason + Act) pattern.</li>
+                <li>Expose native Python functions and third-party APIs (e.g. search, computation) as LLM tools.</li>
+                <li>Orchestrate complex agentic behavior with state management and cyclic loops using LangGraph.</li>
+                <li>Implement multi-agent team patterns and utilize the LLM Council/Debate pattern.</li>
+                <li>Deploy working interactive agent prototypes onto Streamlit and Hugging Face.</li>
+            </ul>
+        </section>
+
+        <section class="details-section" id="audience-prereqs">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div>
+                    <h2 style="font-size: 1.4rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Target Audience</h2>
+                    <p style="color: var(--text-color);">
+                        This bootcamp is tailor-made for <strong>software engineers, AI developers, researchers, and technical architects</strong> who already possess programming experience and want to rapidly master practical agent construction.
+                    </p>
+                </div>
+                <div>
+                    <h2 style="font-size: 1.4rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Prerequisites</h2>
+                    <p style="color: var(--text-color);">
+                        Strong proficiency in <strong>Python</strong> (async/await, type hints, basic OOP) is required. A laptop with local Python 3.10+ installed and a valid API key setup (instructions below) are mandatory.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="details-section" id="time-structure">
+            <h2>Bootcamp Schedule</h2>
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Slot</th>
+                            <th>Time</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Session 1: Foundations & ReAct Pattern</strong></td>
+                            <td>9:30 AM – 11:00 AM</td>
+                            <td>90 min</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: var(--secondary-color); font-weight: 500;">Morning Coffee Break</span></td>
+                            <td>11:00 AM – 11:15 AM</td>
+                            <td>15 min</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session 2: Tool Integration & Research Agents</strong></td>
+                            <td>11:15 AM – 1:00 PM</td>
+                            <td>105 min</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: var(--secondary-color); font-weight: 500;">Networking Lunch</span></td>
+                            <td>1:00 PM – 2:00 PM</td>
+                            <td>60 min</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session 3: Orchestrating Graphs with LangGraph</strong></td>
+                            <td>2:00 PM – 3:30 PM</td>
+                            <td>90 min</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: var(--secondary-color); font-weight: 500;">Afternoon Refreshment Break</span></td>
+                            <td>3:30 PM – 3:45 PM</td>
+                            <td>15 min</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session 4: Multi-Agent Systems & Deployment</strong></td>
+                            <td>3:45 PM – 5:30 PM</td>
+                            <td>105 min</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="details-section" id="setup-guide">
+            <h2>Pre-Bootcamp Setup Guide</h2>
+            <p style="color: var(--secondary-color); margin-bottom: 1.5rem;">
+                Since this is an intensive, single-day bootcamp, participants must complete these setups <strong>before arrival</strong>. There will be no time allocated for environment troubleshooting during sessions.
+            </p>
+
+            <h3 style="color: #fff; margin-bottom: 0.75rem; font-size: 1.15rem;">1. Accounts & API Keys (All Free)</h3>
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Purpose</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Google Account / AI Studio</strong></td>
+                            <td>To generate a free Gemini API key</td>
+                            <td><a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer">aistudio.google.com</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hugging Face Account</strong></td>
+                            <td>Accessing open source models & HF Spaces</td>
+                            <td><a href="https://huggingface.co" target="_blank" rel="noopener noreferrer">huggingface.co</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>GitHub</strong></td>
+                            <td>Hosting code and deployment pipelines</td>
+                            <td><a href="https://github.com" target="_blank" rel="noopener noreferrer">github.com</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Streamlit Cloud</strong></td>
+                            <td>Free interactive interface hosting</td>
+                            <td><a href="https://streamlit.io/cloud" target="_blank" rel="noopener noreferrer">streamlit.io/cloud</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="color: #fff; margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem;">2. Local Environment Installation</h3>
+            <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; font-size: 0.95rem;">
+                <ul style="list-style-type: none; display: flex; flex-direction: column; gap: 1rem; padding: 0;">
+                    <li>
+                        <strong>Python 3.10+</strong> — Install Python from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer">python.org</a>
+                    </li>
+                    <li>
+                        <strong>Ollama (Local Models)</strong> — Install and download a lightweight model for offline testing:
+                        <code style="background-color: var(--bg-color); padding: 0.2rem 0.4rem; border-radius: 4px; display: block; margin-top: 0.5rem; font-family: monospace;">ollama pull llama3.2:3b</code>
+                    </li>
+                    <li>
+                        <strong>Required Python Libraries</strong> — Execute the following command in your virtual environment:
+                        <pre style="background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; margin-top: 0.5rem; overflow-x: auto; font-family: monospace; font-size: 0.85rem; color: #fff;">pip install langchain langchain-google-genai langgraph crewai streamlit duckduckgo-search wikipedia arxiv python-dotenv</pre>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="details-section" id="agenda">
+            <h2>Detailed Session Breakdown</h2>
+            <div class="accordion">
+                <!-- Session 1 -->
+                <details class="accordion-item" open id="session1">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Session 1 — Agentic AI Foundations & ReAct Pattern</strong>
+                            <span class="day-theme">Topics: Autonomy spectrum, loops, scratchpads, prompt-based ReAct engine.</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Concepts & Theory</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>The Spectrum of AI: Chatbots vs. Chains vs. Autonomous Agents.</li>
+                            <li>How LLMs plan and reason: Scratchpads, chain-of-thought, and self-correction.</li>
+                            <li>The <strong>ReAct</strong> loop pattern (Reasoning + Acting) explained mathematically and visually.</li>
+                            <li>Token limits, context window conservation, and state persistence.</li>
+                        </ul>
+                        <h3>Hands-on Lab</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li><strong>Building a ReAct Agent from scratch:</strong> Writing a bare-metal Python agent loop that queries a Google Gemini model, processes thoughts, calls mock arithmetic tools, and parses final answers without frameworks.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- Session 2 -->
+                <details class="accordion-item" id="session2">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Session 2 — Native Tool Integration & Web-Search Agents</strong>
+                            <span class="day-theme">Topics: Function calling, API schemas, Pydantic, search and extraction pipelines.</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Concepts & Theory</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>How function calling works under the hood: JSON schema generation, model guidance, and output intercepting.</li>
+                            <li>Type enforcement and schema definitions using Pydantic.</li>
+                            <li>Handling tool execution exceptions: retry limits, model corrections, and fallback values.</li>
+                        </ul>
+                        <h3>Hands-on Lab</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li><strong>Building a Smart Research Agent:</strong> Equipping our agent with DuckDuckGo Search, Wikipedia API, and arXiv API. Constructing a system that accepts a complex topic, queries across multiple databases, handles scraping errors, and synthesizes a structured Markdown report.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- Session 3 -->
+                <details class="accordion-item" id="session3">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Session 3 — Orchestrating Stateful Graphs with LangGraph</strong>
+                            <span class="day-theme">Topics: Node-edge graphs, state schemas, conditional routing, cyclic execution, persistence.</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Concepts & Theory</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Why linear agent chains fail for complex, cyclic business processes.</li>
+                            <li>The state-machine abstraction: Nodes (functions), Edges (routing), and State (context database).</li>
+                            <li>Conditional execution, cycle checks, and human-in-the-loop validation checkpoints.</li>
+                        </ul>
+                        <h3>Hands-on Lab</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li><strong>Building an Editorial Multi-Step Writer:</strong> Implementing a graph-based LangGraph application with a "Writer Node" and a "Critic Node". The agent generates an article, routes it to the critic for evaluation, cycles back for revisions if edits are suggested, and saves the final output only when requirements are satisfied.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- Session 4 -->
+                <details class="accordion-item" id="session4">
+                    <summary class="accordion-summary">
+                        <div>
+                            <strong>Session 4 — Multi-Agent Systems, Council Patterns & Deployment</strong>
+                            <span class="day-theme">Topics: CrewAI roles, supervisor pattern, LLM Council, Streamlit deployment, security.</span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <h3>Concepts & Theory</h3>
+                        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Multi-agent topologies: Sequential pipelines, hierarchical committees, and peer-to-peer discussions.</li>
+                            <li><strong>The LLM Council Pattern:</strong> Orchestrating multiple distinct models (cloud Gemini vs. local Llama via Ollama) to debate, vote on, and optimize outputs.</li>
+                            <li>Security and safety: Preventing prompt injection, setting execution sandboxes, and rate limits.</li>
+                        </ul>
+                        <h3>Hands-on Lab</h3>
+                        <ul style="padding-left: 1.5rem;">
+                            <li><strong>Deploying the Agentic Application:</strong> Wrap the research agent in a web-based **Streamlit** user interface. Add configuration options for models, and deploy the live app to Streamlit Community Cloud.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section class="details-section" id="certification">
+            <h2>Assessment & Certification</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.75rem; font-size: 1.1rem;">Hands-on Code Evaluation</h3>
+                    <p style="font-size: 0.95rem; color: var(--secondary-color); line-height: 1.5;">
+                        During Session 4, participants showcase their working Streamlit/LangGraph codebase locally. Successful invocation of the tools, state checks, and output correctness are assessed live.
+                    </p>
+                </div>
+                <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.75rem; font-size: 1.1rem;">Certificate of Mastery</h3>
+                    <p style="font-size: 0.95rem; color: var(--secondary-color); line-height: 1.5;">
+                        A digital Certificate of Mastery in Agentic AI Engineering (signed by the training organizer and referencing the syllabus design by <a href="https://aksharpd.com" target="_blank" rel="noopener noreferrer">Akshar Prabhu Desai</a>) is awarded upon demonstrating a functioning agent workflow.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="details-section" id="logistics">
+            <h2>Logistics Checklist (for Host Venues)</h2>
+            <div class="checklist-grid">
+                <div class="checklist-card">
+                    <h3>Technical Readiness</h3>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="outlet" name="outlet" checked disabled>
+                        <label for="outlet">Dedicated power outlet at every single seat (essential for continuous local modeling).</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="bandwidth" name="bandwidth" checked disabled>
+                        <label for="bandwidth">High-speed Internet (minimum 100 Mbps downstream) to support concurrent API calls.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="projector" name="projector" checked disabled>
+                        <label for="projector">HD projector / dual screens for presenter codebase sharing.</label>
+                    </div>
+                </div>
+                <div class="checklist-card">
+                    <h3>Event Setup</h3>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="catering" name="catering" checked disabled>
+                        <label for="catering">Coffee, tea, and quick refreshments available all day to maintain high energy.</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="git-template" name="git-template" checked disabled>
+                        <label for="git-template">GitHub repository containing starter code templates ready for cloning.</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Agentic Protocols. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

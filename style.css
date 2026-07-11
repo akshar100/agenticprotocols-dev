@@ -517,7 +517,22 @@ footer {
 
 .checklist-item label {
     cursor: pointer;
-    line-height: 1.4;
+}
+
+/* Notice Banner / Callout box */
+.info-note {
+    background-color: rgba(88, 166, 255, 0.05);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.info-note strong {
+    color: #fff;
 }
 
 /* Responsive */
