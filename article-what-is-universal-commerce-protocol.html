@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is Universal Commerce Protocol? - Agentic Protocols</title>
+    <meta name="description" content="An introduction to the Universal Commerce Protocol (UCP), an open standard enabling seamless and interoperable agentic commerce.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo" id="site-logo">Agentic Protocols</div>
+        <nav id="main-navigation">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="ucp.html" id="back-to-ucp"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to UCP Overview
+            </a>
+        </div>
+
+        <article class="article-content" id="article-what-is-ucp">
+            <span class="badge">Protocol Overview</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                What is Universal Commerce Protocol?
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>July 17, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>4 min</strong></span>
+            </div>
+
+            <p>Artificial Intelligence is rapidly transitioning from a tool that helps users search for products to autonomous agents capable of executing purchasing tasks. However, our current web infrastructure is not built for AI-driven transactions. Traditional e-commerce integrations rely on custom, proprietary REST APIs (such as those provided by Shopify, WooCommerce, or custom databases). For an AI agent to shop across thousands of independent merchants, developers would need to write, test, and maintain thousands of custom tool integrations. This is where the <strong>Universal Commerce Protocol (UCP)</strong> steps in.</p>
+
+            <p>UCP is an open standard designed specifically to address this fragmentation. It establishes a uniform, semantic API contract that any merchant can implement, allowing AI agents to interact with catalogs, manage shopping carts, execute checkouts, and handle payments using a single, predictable protocol.</p>
+
+            <h2>Why Traditional APIs Fail AI Agents</h2>
+            <p>In traditional e-commerce, websites are designed for visual consumption by humans. Human developers write custom scripts to orchestrate processes, adapting to different payload fields, query parameters, and checkout flows. AI agents, however, operate best when tool descriptions and API contracts are uniform, predictable, and strongly typed. UCP replaces this fragmentation with standardized schemas, enabling agents to dynamically discover endpoints and invoke actions with safety, security, and high reliability.</p>
+
+            <h2>Core Pillars of the Protocol</h2>
+            <p>The UCP specification standardizes the entire commerce lifecycle into four main areas:</p>
+            <ul>
+                <li><strong>Catalog & Product Discovery:</strong> Standardized models for describing product variants, attributes, availability, and pricing. This allows agents to parse search results and extract precisely what they need.</li>
+                <li><strong>Cart Operations:</strong> Standard APIs for adding items, calculating discounts, taxes, and shipping rates on the fly.</li>
+                <li><strong>Checkout & Transaction Handshake:</strong> A uniform flow for submitting customer shipping info, contact details, and handling payment intents securely.</li>
+                <li><strong>Dynamic Merchant Discovery:</strong> By placing a standard JSON profile at a well-known path (<code>/.well-known/ucp</code>), merchants declare their supported endpoints, public keys, and protocol versions, enabling agents to communicate immediately without manual pre-configuration.</li>
+            </ul>
+
+            <h2>The Shift to Agentic Commerce</h2>
+            <p>With UCP, shopping moves from a search-and-click manual flow to an intent-driven request. Instead of spending hours comparing products, a user can instruct an AI agent: "Find a heavy-duty hiking backpack under $150, purchase it, and ship it to my home." The agent leverages UCP to search compliant merchants, build a cart, apply eligible discount codes, present the checkout summary, and safely execute the payment.</p>
+
+            <p>By standardizing these communication interfaces, UCP serves as the underlying bridge between autonomous reasoning systems and retail execution rails, marking the beginning of the agentic commerce era.</p>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Agentic Protocols. All rights reserved. Designed by <a href="https://aksharpd.com" target="_blank" rel="noopener noreferrer">Akshar Prabhu Desai</a>.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;" id="footer-ucp-py-sdk">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer" id="footer-dev-portal">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
