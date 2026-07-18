@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is the x402 protocol? - Agentic Protocols</title>
+    <meta name="description" content="An introduction to the x402 protocol, an open standard reviving the HTTP 402 Payment Required status code for micro-payments in agentic applications.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        pre {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            color: #e6edf3;
+        }
+
+        .header-name { color: #ff7b72; }
+        .header-value { color: #a5d6ff; }
+        .json-key { color: #79c0ff; }
+        .json-string { color: #a5d6ff; }
+        .json-number { color: #ff7b72; }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo" id="site-logo">Agentic Protocols</div>
+        <nav id="main-navigation">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html" id="back-to-articles"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-what-is-x402">
+            <span class="badge">Payments</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                What is the x402 protocol?
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>July 17, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>5 min</strong></span>
+            </div>
+
+            <p>x402 is not an agentic protocol per se, but rather an open, application-level protocol that revives the HTTP 402 status code. In the HTTP protocol, a status code refers to how an HTTP request ends. A 200 status code indicates that the server responded successfully, 500 suggests that the server could not handle the request correctly, whereas 404 suggests that the request itself was not fulfilled as the target of the request was not found. As the HTTP protocol was developed, its designers showed the foresight to reserve status code 402 — which we have rarely, if ever, seen implemented <a href="#ref-1">[1]</a>. But not anymore.</p>
+
+            <p>Status 402 indicates that the server can handle the request, but the requester needs to pay for the resource. However, during the evolution of the internet there was no easy payment mechanism that could pay for a single HTTP request. The problem with paying for a single request is that the payment is likely going to be extremely small, perhaps a fraction of a cent. These could be called "micro-payments". Modern payment methods such as credit cards have very high transaction costs and are simply not viable for making these micro-payments.</p>
+
+            <p>With the popularization of cryptocurrencies, however, this changed. Coinbase, a leading cryptocurrency company, led the development of the x402 protocol in 2025 <a href="#ref-2">[2]</a> — a payment protocol designed to utilize the 402 status code to make micropayments using on-chain stablecoins like USDC. The x402 Foundation, operating under the Linux Foundation (similar to how the Linux Foundation stewards other open standards), now oversees the development of this protocol, and companies like Visa, Mastercard, Stripe, Google, and AWS are among its 40 founding members <a href="#ref-3">[3]</a>.</p>
+
+            <p>This protocol uses low-fee chains like Base or Solana to allow clients to make micro-payments and settle them using USDC <a href="#ref-4">[4]</a>.</p>
+
+            <p>Architecturally, the x402 payment protocol is designed as a stateless, transport-layer economic handshake between an HTTP client and a web server. It standardizes how a machine reads a payment requirement, generates a cryptographic authorization, and proves settlement — all natively inside the standard HTTP lifecycle <a href="#ref-2">[2, 5]</a>.</p>
+
+            <p>There are three actors in a successful x402 request:</p>
+            <ul>
+                <li><strong>Client:</strong> Makes a request to the server to access a resource that requires payment.</li>
+                <li><strong>Server:</strong> The backend API or web host providing a digital asset or service. It acts as a gateway that enforces payment-gating via HTTP response states.</li>
+                <li><strong>Facilitator:</strong> A critical abstraction layer. The facilitator watches the blockchain, verifies the client's cryptographic authorization signatures, and handles the low-level on-chain gas fees and settlement mechanics. This allows the merchant server to remain lightweight without maintaining direct node synchronization <a href="#ref-5">[5]</a>.</li>
+            </ul>
+
+            <h2>HTTP Handshake Mechanism</h2>
+
+            <h3>Step 1: The Server Challenge (HTTP 402)</h3>
+            <p>When an unauthenticated or unpaid request hits a restricted endpoint, the server responds with an HTTP 402 Payment Required status. It attaches a <code>PAYMENT-REQUIRED</code> header containing the required payment details <a href="#ref-5">[5]</a>:</p>
+
+            <pre><code>HTTP/1.1 <span class="json-number">402</span> Payment Required
+<span class="header-name">Content-Type</span>: <span class="header-value">application/json</span>
+<span class="header-name">PAYMENT-REQUIRED</span>: {
+  <span class="json-key">"version"</span>: <span class="json-string">"2"</span>,
+  <span class="json-key">"network"</span>: <span class="json-string">"eip155:8453"</span>,
+  <span class="json-key">"token"</span>: <span class="json-string">"0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"</span>,
+  <span class="json-key">"amount"</span>: <span class="json-string">"50000"</span>,
+  <span class="json-key">"recipient"</span>: <span class="json-string">"0x9876...5432"</span>,
+  <span class="json-key">"nonce"</span>: <span class="json-string">"f8a29b4c0e"</span>,
+  <span class="json-key">"expiresAt"</span>: <span class="json-number">1782345600</span>
+}</code></pre>
+
+            <h3>Step 2: The Client Retries</h3>
+            <p>The client reads the header in the 402 response, signs the exact billing parameters using its private key, and immediately retries the exact same HTTP request, this time attaching a <code>PAYMENT-SIGNATURE</code> header <a href="#ref-5">[5]</a>:</p>
+
+            <pre><code>POST /v1/generate-image HTTP/1.1
+<span class="header-name">Host</span>: <span class="header-value">ai-service.com</span>
+<span class="header-name">PAYMENT-SIGNATURE</span>: {
+  <span class="json-key">"signature"</span>: <span class="json-string">"0x4a8c9b..."</span>,
+  <span class="json-key">"signer"</span>: <span class="json-string">"0x1234...abcd"</span>,
+  <span class="json-key">"facilitator"</span>: <span class="json-string">"https://coinbase.com"</span>
+}</code></pre>
+
+            <p>The signature, signer, and facilitator are sufficient for the server to securely pull money via the facilitator.</p>
+            <p>For the actual settlement, there are generally two alternatives: the EVM approach or the Solana approach to quick settlement <a href="#ref-4">[4]</a>.</p>
+
+            <h2>Agentic Payments</h2>
+            <p>x402 works seamlessly with agentic payments. LLM harnesses using MCP for tool interfacing can use the LLM to parse the 402 header and then use other tools to generate the signature and make new requests seamlessly with MCP. Production-ready middleware is available for nearly all major server frameworks, allowing this to be done transparently with little developer effort <a href="#ref-6">[6]</a>.</p>
+
+            <p>AgenticProtocols.dev is a one-stop place for all the various agentic protocols, and we wish to release toolkits to better understand, learn, and simulate x402 payments using agentic AI.</p>
+
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+
+            <h2 id="references" style="font-size: 1.4rem;">References</h2>
+            <ol style="font-size: 0.95rem; color: var(--secondary-color); padding-left: 1.25rem;">
+                <li id="ref-1">[1] MDN Web Docs — 402 Payment Required: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402</a></li>
+                <li id="ref-2">[2] Coinbase — Introducing x402: a new standard for internet-native payments: <a href="https://www.coinbase.com/developer-platform/discover/launches/x402" target="_blank" rel="noopener noreferrer">https://www.coinbase.com/developer-platform/discover/launches/x402</a></li>
+                <li id="ref-3">[3] Linux Foundation — Operational Launch of x402 Foundation (July 14, 2026): <a href="https://www.linuxfoundation.org/press/linux-foundation-announces-operational-launch-of-x402-foundation-to-standardize-internet-native-payments-for-ai-agents-and-applications" target="_blank" rel="noopener noreferrer">https://www.linuxfoundation.org/press/linux-foundation-announces-operational-launch-of-x402-foundation-to-standardize-internet-native-payments-for-ai-agents-and-applications</a></li>
+                <li id="ref-4">[4] Solana — What is x402?: <a href="https://solana.com/x402/what-is-x402" target="_blank" rel="noopener noreferrer">https://solana.com/x402/what-is-x402</a></li>
+                <li id="ref-5">[5] x402 Protocol Specification (GitHub): <a href="https://github.com/coinbase/x402" target="_blank" rel="noopener noreferrer">https://github.com/coinbase/x402</a></li>
+                <li id="ref-6">[6] Coinbase Developer Platform — x402 Documentation: <a href="https://docs.cdp.coinbase.com/x402/core-concepts/http-402" target="_blank" rel="noopener noreferrer">https://docs.cdp.coinbase.com/x402/core-concepts/http-402</a></li>
+            </ol>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Agentic Protocols. All rights reserved. Designed by <a href="https://aksharpd.com" target="_blank" rel="noopener noreferrer">Akshar Prabhu Desai</a>.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;" id="footer-ucp-py-sdk">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer" id="footer-dev-portal">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
