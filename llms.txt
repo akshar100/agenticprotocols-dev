@@ -1,0 +1,34 @@
+# Agentic Protocols Developer Portal
+
+Exposing open standards for AI agent integration, commerce, and payments.
+
+## Core Protocols
+
+- [Model Context Protocol (MCP)](https://modelcontextprotocol.io): Secure two-way connections between data sources and AI agents.
+- [Universal Commerce Protocol (UCP)](https://agenticprotocols.dev/ucp.html): Uniform semantic API contract for agentic catalog discovery, cart management, and checkouts.
+- [Agentic Payment Protocol (APP)](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol): Secure, autonomous stablecoin micro-payments and wallet schemas.
+
+## Bootcamps & Training
+
+- [5-Day Bootcamp: Generative AI & Agentic AI](https://agenticprotocols.dev/training-genai-agentic-journey.html): Mastering LLM applications, LangGraph, and multi-agent workflows.
+- [1-Day Bootcamp: Agentic AI Immersive](https://agenticprotocols.dev/training-oneday-agentic-bootcamp.html): Hands-on training for ReAct loops, tool calling, and state machines.
+
+## Articles & Architectural Patterns
+
+### Agentic Architectural Patterns
+- [Single Agent Patterns: Reason and Act Loop](https://agenticprotocols.dev/article-single-agent-patterns-reason-and-act-loop.html): Part 1 on interleaving thoughts and tool execution.
+- [Single Agent Patterns: Plan-Then-Execute](https://agenticprotocols.dev/article-single-agent-patterns-plan-then-execute.html): Part 2 on decoupling planning from execution for long-horizon coherence.
+
+### Protocols & Specifications
+- [What is the x402 Protocol?](https://agenticprotocols.dev/article-what-is-x402-protocol.html): Open micro-payment standard utilizing the HTTP 402 status code.
+- [What is Universal Commerce Protocol?](https://agenticprotocols.dev/article-what-is-universal-commerce-protocol.html): Standardized e-commerce communication for autonomous agent purchase loops.
+- [Integrating UCP: The Python SDK](https://agenticprotocols.dev/article-integrating-ucp-python-sdk.html): Developer guide for implementing ucp-py.
+- [What are Agentic Interfaces?](https://agenticprotocols.dev/article-what-are-agentic-interfaces.html): Standardized pathways for agent-to-agent and tool-based communications.
+
+## Navigation & Research
+- [Home](https://agenticprotocols.dev/): Landing page and quick-start guides.
+- [Articles](https://agenticprotocols.dev/articles.html): Listing of all publications.
+- [Research](https://agenticprotocols.dev/research.html): Active research directions (secure sandboxes, inter-agent communication, stateful RAG).
+- [Learn](https://agenticprotocols.dev/learn.html): Open-source bootcamps and glossary definitions.
+- [Events](https://agenticprotocols.dev/events.html): Upcoming meetups and workshops.
+- [News](https://agenticprotocols.dev/news.html): Community updates.
