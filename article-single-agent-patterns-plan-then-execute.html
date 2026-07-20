@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Agent Patterns: Plan-Then-Execute - Agentic Protocols</title>
+    <meta name="description"
+        content="An in-depth look at the Plan-Then-Execute architectural pattern, separating planning from action for complex, long-horizon AI agent tasks.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* Rich Aesthetics Elements */
+        .intent-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.05) 0%, rgba(139, 148, 158, 0.02) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .intent-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intent-box h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .intent-box p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .react-svg {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        /* CSS animations for SVG flow line */
+        @keyframes dashflow {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .flow-path {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.2s linear infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.8));
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+        }
+
+        .active-node {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        /* Tradeoffs Grid layout */
+        .tradeoffs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .tradeoffs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tradeoff-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tradeoff-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(88, 166, 255, 0.4);
+        }
+
+        .tradeoff-card.pro {
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .tradeoff-card.con {
+            border-left: 3px solid #ff7b72;
+        }
+
+        .tradeoff-card h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tradeoff-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Citations list */
+        .citation-list {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin-top: 1.5rem;
+        }
+
+        .citation-item {
+            background-color: rgba(22, 27, 34, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .citation-number {
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .citation-details {
+            font-size: 0.95rem;
+        }
+
+        .citation-details a {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-plan-execute">
+            <span class="badge">Agentic Architectural Patterns • Part 2</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Single Agent Patterns: Plan-Then-Execute
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>July 19, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>4 min</strong></span>
+            </div>
+
+            <div class="intent-box">
+                <h3>Intent</h3>
+                <p>Separate deliberation from action: produce an explicit multi-step plan first, then execute steps, optionally replanning on failure.</p>
+            </div>
+
+            <h2>Introduction</h2>
+            <p>While the step-by-step reasoning of a Reason and Act (ReAct) loop is highly adaptive, it exhibits significant limitations when applied to long-horizon, complex tasks. In unconstrained loops, errors can compound quickly, the context window can overflow with detailed execution traces, and the agent is susceptible to losing the high-level goal or wandering into infinite loops. The <strong>Plan-Then-Execute</strong> pattern resolves these issues by explicitly separating the thinking phase (deciding *what* to do) from the execution phase (doing it).</p>
+
+            <h2>Structure of the Pattern</h2>
+            <p>The Plan-Then-Execute architecture divides the execution lifecycle into distinct stages managed by specialized components:</p>
+            <ul>
+                <li><strong>Planner:</strong> A high-capability language model parses the initial user prompt and outputs an explicit multi-step plan (often structured as a task list, a timeline, or a Directed Acyclic Graph - DAG).</li>
+                <li><strong>Executor:</strong> A decoupled engine (which can be a smaller, faster model, or a deterministic parser/runtime) executes the plan's tasks sequentially or in parallel, invoking tools and recording outputs.</li>
+                <li><strong>Monitor:</strong> A validation layer tracks execution state, logs success metrics, and checks if execution outcomes align with the plan. If a step fails, or if environmental feedback contradicts the plan's assumptions, it halts execution and invokes a **Replanning Loop**, passing the current system state back to the Planner for adjustments.</li>
+            </ul>
+
+            <div class="diagram-container">
+                <svg class="react-svg" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Grid Pattern for style -->
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#21262d" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="350" fill="transparent" />
+                    <rect width="650" height="350" fill="url(#grid)" opacity="0.3" rx="8" />
+
+                    <!-- User Prompt -> Planner -->
+                    <path d="M 30 90 L 100 90" stroke="#30363d" stroke-width="2" />
+                    <polygon points="100,90 90,85 90,95" fill="#30363d" />
+                    <text x="35" y="75" fill="#8b949e" font-family="'Inter', sans-serif" font-size="11" font-weight="500">PROMPT</text>
+
+                    <!-- Planner -> DAG Plan -->
+                    <path d="M 210 90 L 270 90" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 210 90 L 270 90" stroke="var(--primary-color)" stroke-width="2" opacity="0.8" />
+                    <polygon points="270,90 260,85 260,95" fill="var(--primary-color)" />
+
+                    <!-- Plan -> Executor -->
+                    <path d="M 400 90 L 480 110" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 400 90 L 480 110" stroke="#d2a8ff" stroke-width="2" opacity="0.8" />
+                    <polygon points="480,110 470,103 473,113" fill="#d2a8ff" />
+
+                    <!-- Executor <-> Environment -->
+                    <path d="M 535 150 L 535 230" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 535 150 L 535 230" stroke="#39d353" stroke-width="2" opacity="0.8" />
+                    <!-- Double-headed arrow elements -->
+                    <polygon points="535,230 530,220 540,220" fill="#39d353" />
+                    <polygon points="535,150 530,160 540,160" fill="#39d353" />
+                    <text x="545" y="195" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="11">Tool Execution</text>
+
+                    <!-- Executor -> Monitor -->
+                    <path d="M 480 135 L 350 230" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 480 135 L 350 230" stroke="#f0883e" stroke-width="2" opacity="0.8" />
+                    <polygon points="350,230 361,226 355,221" fill="#f0883e" />
+
+                    <!-- Monitor -> Planner (Re-planning Loop) -->
+                    <path d="M 280 260 L 155 260 L 155 130" stroke="#30363d" stroke-width="2" stroke-dasharray="4,4" />
+                    <path class="flow-path" d="M 280 260 L 155 260 L 155 130" stroke="#ff7b72" stroke-width="2" opacity="0.8" />
+                    <polygon points="155,130 150,140 160,140" fill="#ff7b72" />
+                    <text x="165" y="250" fill="#ff7b72" font-family="'Inter', sans-serif" font-size="11" font-weight="600">RE-PLAN ON FAILURE</text>
+
+                    <!-- Planner Node -->
+                    <g transform="translate(100, 60)">
+                        <rect width="110" height="60" rx="8" fill="#161b22" stroke="var(--primary-color)" stroke-width="2" />
+                        <text x="55" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">1. Planner</text>
+                        <text x="55" y="44" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">LLM Deliberation</text>
+                    </g>
+
+                    <!-- Plan (DAG representation) -->
+                    <g transform="translate(270, 30)">
+                        <rect width="130" height="120" rx="8" fill="#161b22" stroke="#d2a8ff" stroke-width="1.5" class="active-node" />
+                        <text x="65" y="22" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Structured Plan</text>
+                        
+                        <!-- Task 1 (Done) -->
+                        <rect x="15" y="35" width="100" height="20" rx="4" fill="rgba(57, 211, 83, 0.1)" stroke="#39d353" stroke-width="1" />
+                        <text x="25" y="48" fill="#39d353" font-family="'Inter', sans-serif" font-size="9" font-weight="600">✓ Task 1: Scrape</text>
+
+                        <!-- Task 2 (Active) -->
+                        <rect x="15" y="62" width="100" height="20" rx="4" fill="rgba(88, 166, 255, 0.1)" stroke="var(--primary-color)" stroke-width="1" />
+                        <text x="25" y="75" fill="var(--primary-color)" font-family="'Inter', sans-serif" font-size="9" font-weight="600">⚡ Task 2: Parse</text>
+
+                        <!-- Task 3 (Pending) -->
+                        <rect x="15" y="89" width="100" height="20" rx="4" fill="rgba(48, 54, 61, 0.2)" stroke="#30363d" stroke-width="1" />
+                        <text x="25" y="102" fill="#8b949e" font-family="'Inter', sans-serif" font-size="9">○ Task 3: Summarize</text>
+                    </g>
+
+                    <!-- Executor Node -->
+                    <g transform="translate(480, 90)">
+                        <rect width="110" height="60" rx="8" fill="#161b22" stroke="#39d353" stroke-width="1.5" />
+                        <text x="55" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">2. Executor</text>
+                        <text x="55" y="44" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Task Exec / Runtime</text>
+                    </g>
+
+                    <!-- Environment Node -->
+                    <g transform="translate(480, 230)">
+                        <rect width="110" height="60" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+                        <text x="55" y="28" fill="#8b949e" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">Environment</text>
+                        <text x="55" y="44" fill="#30363d" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">APIs & File System</text>
+                    </g>
+
+                    <!-- Monitor Node -->
+                    <g transform="translate(280, 230)">
+                        <rect width="130" height="60" rx="8" fill="#161b22" stroke="#f0883e" stroke-width="1.5" />
+                        <text x="65" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">3. Monitor</text>
+                        <text x="65" y="44" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Validation & State Check</text>
+                    </g>
+                </svg>
+            </div>
+
+            <p>Decoupling planning from execution was formalized under methodologies like **Plan-and-Solve Prompting** <a href="#cite-1">[1]</a>. Rather than forcing the model to generate both thoughts and actions simultaneously, this pattern allows the system to structure its entire action path beforehand, enabling more coherent behavior on long-horizon objectives.</p>
+
+            <h2>Trade-offs</h2>
+            <p>Separating planning from execution offers significant architectural advantages but introduces unique complexities:</p>
+
+            <div class="tradeoffs-container">
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="var(--accent-color)" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Improved Long-Horizon Coherence
+                    </h4>
+                    <p>Decoupling the high-level roadmap from step-by-step mechanics ensures the model doesn't get sidetracked or lose its place over dozens of steps.</p>
+                </div>
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="var(--accent-color)" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Legibility & Parallelization
+                    </h4>
+                    <p>Plans are easily readable, permitting human-in-the-loop review. Independent steps can be executed in parallel (e.g. parallel SDK builds).</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Plan Stale Rate
+                    </h4>
+                    <p>Plans created with incomplete initial information can quickly go stale once tool execution begins and the environment responds unpredictably.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Rigid Plan Adherence
+                    </h4>
+                    <p>A classic failure mode is rigid adherence to a flawed or outdated plan without dynamic checking, leading to wasted execution steps.</p>
+                </div>
+            </div>
+
+            <h2>Known Uses</h2>
+            <p>The Plan-Then-Execute pattern is widely used across multi-task schedulers and production scaffolds:</p>
+            <ul>
+                <li><strong>Plan-and-Solve Prompting:</strong> Structured zero-shot prompting techniques that command models to "first devise a plan, then solve it step-by-step" to avoid reasoning failures <a href="#cite-1">[1]</a>.</li>
+                <li><strong>HuggingGPT:</strong> An orchestration manager that delegates tasks to multiple models. It leverages ChatGPT as a planner to parse input requests, map them to specific HuggingFace model APIs, and orchestrate their sequential executions <a href="#cite-2">[2]</a>.</li>
+                <li><strong>"To-Do List" Scaffolds in Coding Agents:</strong> Sophisticated IDE and software engineering agents that produce formal checklist states (like a local <code>task.md</code>), updating progress markers (`[x]`, `[/]`, `[ ]`) as they code and debug.</li>
+            </ul>
+
+            <h2 style="margin-top: 3rem;">References</h2>
+            <ul class="citation-list">
+                <li class="citation-item" id="cite-1">
+                    <span class="citation-number">[1]</span>
+                    <div class="citation-details">
+                        Wang, L., Xu, W., Lan, Y., Hu, Z., Lan, Y., & Lim, E. P. (2023).
+                        <strong>Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning in Large Language Models.</strong>
+                        <em>International Conference on Learning Representations (ICLR)</em>.
+                        <br><a href="https://arxiv.org/abs/2305.04091" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2305.04091</a>
+                    </div>
+                </li>
+                <li class="citation-item" id="cite-2">
+                    <span class="citation-number">[2]</span>
+                    <div class="citation-details">
+                        Shen, Y., Song, K., Tan, X., Li, D., Lu, C., & Zhou, Y. (2023).
+                        <strong>HuggingGPT: Solving AI Tasks with ChatGPT and its Friends in Hugging Face.</strong>
+                        <em>Neural Information Processing Systems (NeurIPS)</em>.
+                        <br><a href="https://arxiv.org/abs/2303.17580" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2303.17580</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Agentic Protocols. All rights reserved. Designed by <a href="https://aksharpd.com" target="_blank" rel="noopener noreferrer">Akshar Prabhu Desai</a>.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
