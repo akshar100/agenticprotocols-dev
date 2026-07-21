@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Agent Patterns: Search over Actions - Agentic Protocols</title>
+    <meta name="description"
+        content="An in-depth look at the Search over Actions architectural pattern, enabling AI agents to explore, evaluate, and select optimal reasoning and action sequences.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* Rich Aesthetics Elements */
+        .intent-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.05) 0%, rgba(139, 148, 158, 0.02) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .intent-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intent-box h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .intent-box p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .react-svg {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        /* CSS animations for SVG flow line */
+        @keyframes dashflow {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .flow-path {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.2s linear infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.8));
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+        }
+
+        .active-node {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        /* Tradeoffs Grid layout */
+        .tradeoffs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .tradeoffs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tradeoff-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tradeoff-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(88, 166, 255, 0.4);
+        }
+
+        .tradeoff-card.pro {
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .tradeoff-card.con {
+            border-left: 3px solid #ff7b72;
+        }
+
+        .tradeoff-card h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tradeoff-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Citations list */
+        .citation-list {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin-top: 1.5rem;
+        }
+
+        .citation-item {
+            background-color: rgba(22, 27, 34, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .citation-number {
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .citation-details {
+            font-size: 0.95rem;
+        }
+
+        .citation-details a {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-search-actions">
+            <span class="badge">Agentic Architectural Patterns • Part 3</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Single Agent Patterns: Search over Actions
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>July 20, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>4 min</strong></span>
+            </div>
+
+            <div class="intent-box">
+                <h3>Intent</h3>
+                <p>When single-path generation is unreliable, explore a tree or graph of candidate reasoning/action sequences and select among them.</p>
+            </div>
+
+            <h2>Introduction</h2>
+            <p>For complex reasoning tasks, software engineering, or mathematical problem solving, a single linear completion path (whether standard ReAct or static Plan-Then-Execute) is highly vulnerable to early mistakes. If an AI agent commits to an incorrect assumption or selects a suboptimal tool at step one, it can wander far off course, wasting tokens and time. The <strong>Search over Actions</strong> pattern addresses this by transforming the agent's execution path from a linear sequence into a state search tree. This allows the system to systematically explore, evaluate, and backtrack over alternative action paths.</p>
+
+            <h2>Structure of the Pattern</h2>
+            <p>The Search over Actions architecture leverages classical tree and graph search algorithms, mapping them onto generative language model calls and evaluations:</p>
+            <ul>
+                <li><strong>Generator (Proposer):</strong> For any given state, the model is prompted to propose multiple possible next steps (branches) rather than just one. This forms a set of candidate reasoning steps or actions.</li>
+                <li><strong>Evaluator (Value Function):</strong> A critic evaluates the proposed branches. This evaluation can be driven by a separate prompt (self-assessment), an external verifier (such as a unit test runner or compiler), or concrete environment feedback (e.g. HTTP status codes).</li>
+                <li><strong>Search Policy:</strong> An algorithm (such as Breadth-First Search (BFS), Monte Carlo Tree Search (MCTS), or Depth-First Search (DFS)) orchestrates which nodes/branches to expand next based on evaluation scores. Suboptimal paths are pruned, and promising paths are prioritized.</li>
+            </ul>
+
+            <div class="diagram-container">
+                <svg class="react-svg" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Grid Pattern for style -->
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#21262d" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="350" fill="transparent" />
+                    <rect width="650" height="350" fill="url(#grid)" opacity="0.3" rx="8" />
+
+                    <!-- Connections Level 1 -->
+                    <!-- Root -> A1 (Pruned) -->
+                    <path d="M 325 50 L 135 120" stroke="#ff7b72" stroke-width="1.5" opacity="0.6" stroke-dasharray="3,3" />
+                    
+                    <!-- Root -> A2 (Active Flow) -->
+                    <path d="M 325 50 L 325 120" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 325 50 L 325 120" stroke="var(--primary-color)" stroke-width="2" opacity="0.8" />
+                    
+                    <!-- Root -> A3 (Pruned) -->
+                    <path d="M 325 50 L 515 120" stroke="#ff7b72" stroke-width="1.5" opacity="0.6" stroke-dasharray="3,3" />
+
+                    <!-- Connections Level 2 -->
+                    <!-- A2 -> A2.1 (Optimal Flow) -->
+                    <path d="M 325 170 L 240 240" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 325 170 L 240 240" stroke="#39d353" stroke-width="2" opacity="0.8" />
+                    
+                    <!-- A2 -> A2.2 (Pruned) -->
+                    <path d="M 325 170 L 410 240" stroke="#ff7b72" stroke-width="1.5" opacity="0.6" stroke-dasharray="3,3" />
+
+                    <!-- Nodes -->
+                    <!-- Root Node -->
+                    <g transform="translate(270, 20)">
+                        <rect width="110" height="50" rx="8" fill="#161b22" stroke="var(--primary-color)" stroke-width="1.5" />
+                        <text x="55" y="24" fill="#fff" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle">Root State S0</text>
+                        <text x="55" y="38" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Initial Prompt</text>
+                    </g>
+
+                    <!-- Node A1 (Pruned) -->
+                    <g transform="translate(80, 120)">
+                        <rect width="110" height="50" rx="8" fill="#161b22" stroke="#ff7b72" stroke-width="1.5" opacity="0.6" />
+                        <text x="55" y="22" fill="#8b949e" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Action A1</text>
+                        <rect x="25" y="28" width="60" height="14" rx="3" fill="rgba(255, 123, 114, 0.1)" />
+                        <text x="55" y="38" fill="#ff7b72" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">Score: 0.4 ✗</text>
+                    </g>
+
+                    <!-- Node A2 (Selected for Expansion) -->
+                    <g transform="translate(270, 120)">
+                        <rect width="110" height="50" rx="8" fill="#161b22" stroke="var(--primary-color)" stroke-width="2" class="active-node" />
+                        <text x="55" y="22" fill="#fff" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle">Action A2</text>
+                        <rect x="25" y="28" width="60" height="14" rx="3" fill="rgba(88, 166, 255, 0.15)" />
+                        <text x="55" y="38" fill="var(--primary-color)" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">Score: 0.8 ✓</text>
+                    </g>
+
+                    <!-- Node A3 (Pruned) -->
+                    <g transform="translate(460, 120)">
+                        <rect width="110" height="50" rx="8" fill="#161b22" stroke="#ff7b72" stroke-width="1.5" opacity="0.6" />
+                        <text x="55" y="22" fill="#8b949e" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Action A3</text>
+                        <rect x="25" y="28" width="60" height="14" rx="3" fill="rgba(255, 123, 114, 0.1)" />
+                        <text x="55" y="38" fill="#ff7b72" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">Score: 0.2 ✗</text>
+                    </g>
+
+                    <!-- Node A2.1 (Optimal Path) -->
+                    <g transform="translate(180, 240)">
+                        <rect width="120" height="50" rx="8" fill="#161b22" stroke="#39d353" stroke-width="2" />
+                        <text x="60" y="22" fill="#fff" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle">Action A2.1</text>
+                        <rect x="30" y="28" width="60" height="14" rx="3" fill="rgba(57, 211, 83, 0.15)" />
+                        <text x="60" y="38" fill="#39d353" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">Score: 0.9 ★</text>
+                    </g>
+
+                    <!-- Node A2.2 (Pruned) -->
+                    <g transform="translate(350, 240)">
+                        <rect width="120" height="50" rx="8" fill="#161b22" stroke="#ff7b72" stroke-width="1.5" opacity="0.6" />
+                        <text x="60" y="22" fill="#8b949e" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Action A2.2</text>
+                        <rect x="30" y="28" width="60" height="14" rx="3" fill="rgba(255, 123, 114, 0.1)" />
+                        <text x="60" y="38" fill="#ff7b72" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">Score: 0.3 ✗</text>
+                    </g>
+                </svg>
+            </div>
+
+            <p>Two primary frameworks have defined this pattern in LLM systems: **Tree of Thoughts (ToT)** <a href="#cite-1">[1]</a>, which introduced structured tree searching over reasoning traces, and **Language Agent Tree Search (LATS)** <a href="#cite-2">[2]</a>, which unified tree-search architectures with tool execution, state tracking, and external environment feedback.</p>
+
+            <h2>Trade-offs</h2>
+            <p>Searching over action graphs provides massive resilience on complex, algorithmic tasks, but introduces significant design and operating trade-offs:</p>
+
+            <div class="tradeoffs-container">
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="var(--accent-color)" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        High Algorithmic Accuracy
+                    </h4>
+                    <p>Enables the agent to recover from reasoning dead-ends, syntax errors, or environmental failures through deterministic backtracking.</p>
+                </div>
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="var(--accent-color)" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Pruning & Safety Guardrails
+                    </h4>
+                    <p>Allows safety and quality verifiers to veto hazardous or incorrect candidate actions before they are executed in production systems.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Multiplied Resource Costs
+                    </h4>
+                    <p>Exploring both breadth and depth in a search tree causes token consumption and inference latency to grow exponentially with the branching factor.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Evaluator as a Bottleneck
+                    </h4>
+                    <p>The entire search policy depends heavily on the critic's accuracy. A faulty value function will guide the agent down hallucinated paths.</p>
+                </div>
+            </div>
+
+            <h2>Known Uses</h2>
+            <p>Search over Actions is typically utilized in advanced problem-solving wrappers and validation harnesses:</p>
+            <ul>
+                <li><strong>Tree of Thoughts:</strong> Algorithms utilizing BFS/DFS to solve complex puzzles (e.g. Game of 24, Creative Writing) that require planning ahead and backtracking <a href="#cite-1">[1]</a>.</li>
+                <li><strong>Language Agent Tree Search (LATS):</strong> Frameworks leveraging MCTS for decision-making tasks, merging deliberate search with tool-call execution and external feedback <a href="#cite-2">[2]</a>.</li>
+                <li><strong>Best-of-N Sampling:</strong> A degenerate depth-one case of this pattern, where a verifier ranks $N$ complete model completions and selects the highest scoring sequence.</li>
+            </ul>
+
+            <h2 style="margin-top: 3rem;">References</h2>
+            <ul class="citation-list">
+                <li class="citation-item" id="cite-1">
+                    <span class="citation-number">[1]</span>
+                    <div class="citation-details">
+                        Yao, S., Yu, D., Zhao, J., Shafran, I., Narasimhan, K., Yuan, Y., & Cao, Y. (2023).
+                        <strong>Tree of Thoughts: Deliberate Problem Solving with Large Language Models.</strong>
+                        <em>Neural Information Processing Systems (NeurIPS)</em>.
+                        <br><a href="https://arxiv.org/abs/2305.10601" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2305.10601</a>
+                    </div>
+                </li>
+                <li class="citation-item" id="cite-2">
+                    <span class="citation-number">[2]</span>
+                    <div class="citation-details">
+                        Zhou, A., Lei, K., & Wang, H. (2024).
+                        <strong>Language Agent Tree Search: Unifying Reasoning, Acting, and Planning in Language Agents.</strong>
+                        <em>International Conference on Learning Representations (ICLR)</em>.
+                        <br><a href="https://arxiv.org/abs/2310.04406" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2310.04406</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Agentic Protocols. All rights reserved. Designed by <a href="https://aksharpd.com" target="_blank" rel="noopener noreferrer">Akshar Prabhu Desai</a>.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
