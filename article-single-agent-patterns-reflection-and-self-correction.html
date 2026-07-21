@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Agent Patterns: Reflection and Self-Correction - Agentic Protocols</title>
+    <meta name="description"
+        content="An in-depth look at the Reflection and Self-Correction pattern: converting failure signals and critiques into improved iterations within an episode.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* Rich Aesthetics Elements */
+        .intent-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.05) 0%, rgba(139, 148, 158, 0.02) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .intent-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intent-box h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .intent-box p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .react-svg {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        /* CSS animations for SVG flow line */
+        @keyframes dashflow {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .flow-path {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.2s linear infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.8));
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+        }
+
+        .active-node {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        /* Tradeoffs Grid layout */
+        .tradeoffs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .tradeoffs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tradeoff-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tradeoff-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(88, 166, 255, 0.4);
+        }
+
+        .tradeoff-card.pro {
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .tradeoff-card.con {
+            border-left: 3px solid #ff7b72;
+        }
+
+        .tradeoff-card h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tradeoff-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Citations list */
+        .citation-list {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin-top: 1.5rem;
+        }
+
+        .citation-item {
+            background-color: rgba(22, 27, 34, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .citation-number {
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .citation-details {
+            font-size: 0.95rem;
+        }
+
+        .citation-details a {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-reflection-self-correction">
+            <span class="badge">Agentic Architectural Patterns • Part 4</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Single Agent Patterns: Reflection and Self-Correction
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>July 21, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>4 min</strong></span>
+            </div>
+
+            <div class="intent-box">
+                <h3>Intent</h3>
+                <p>Convert failure signals into improved subsequent attempts within the same episode, without weight updates.</p>
+            </div>
+
+            <h2>Introduction</h2>
+            <p>Even with careful planning and step-by-step logic, AI agents frequently generate incorrect code, trigger API validation failures, or encounter compilation issues. The <strong>Reflection and Self-Correction</strong> pattern offers an in-context learning mechanism to recover from these errors. By feeding detailed failure signals back to the model as verbal feedback, the agent learns to correct its mistakes dynamically in the next iteration—all without requiring expensive model weight training or fine-tuning.</p>
+
+            <h2>Structure of the Pattern</h2>
+            <p>The Reflection architecture establishes an iterative refinement cycle containing three main components:</p>
+            <ul>
+                <li><strong>Generator:</strong> The primary model that receives the goal and produces a candidate output (e.g. code snippets, execution scripts, or text completions).</li>
+                <li><strong>Critic (Verifier / Evaluator):</strong> A component that assesses the candidate output's validity. The critic can be the same model prompted to critique its work (self-assessment), an external software verifier (such as a unit test suite, compiler, or JSON-schema parser), or direct environment errors.</li>
+                <li><strong>Feedback Store:</strong> If the verifier flags an error, a detailed critique is compiled (e.g., compile log, traceback, or validation messages). This feedback is appended to the agent's context window or stored in episodic memory, conditioning the Generator's next attempt.</li>
+            </ul>
+
+            <div class="diagram-container">
+                <svg class="react-svg" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Grid Pattern for style -->
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#21262d" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="350" fill="transparent" />
+                    <rect width="650" height="350" fill="url(#grid)" opacity="0.3" rx="8" />
+
+                    <!-- Flow lines -->
+                    <!-- Generator -> Attempt -->
+                    <path d="M 190 150 L 270 150" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 190 150 L 270 150" stroke="var(--primary-color)" stroke-width="2" opacity="0.8" />
+                    <polygon points="270,150 260,145 260,155" fill="var(--primary-color)" />
+
+                    <!-- Attempt -> Critic -->
+                    <path d="M 380 150 L 460 150" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 380 150 L 460 150" stroke="var(--primary-color)" stroke-width="2" opacity="0.8" />
+                    <polygon points="460,150 450,145 450,155" fill="var(--primary-color)" />
+
+                    <!-- Critic Pass -> Success Output -->
+                    <path d="M 515 120 L 515 70" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 515 120 L 515 70" stroke="#39d353" stroke-width="2" opacity="0.8" />
+                    <polygon points="515,70 510,80 520,80" fill="#39d353" />
+                    <text x="525" y="95" fill="#39d353" font-family="'Inter', sans-serif" font-size="11" font-weight="600">PASS (Exit)</text>
+
+                    <!-- Critic Fail -> Feedback -->
+                    <path d="M 515 180 L 515 270 L 380 270" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path" d="M 515 180 L 515 270 L 380 270" stroke="#ff7b72" stroke-width="2" opacity="0.8" />
+                    <polygon points="380,270 390,265 390,275" fill="#ff7b72" />
+                    <text x="440" y="260" fill="#ff7b72" font-family="'Inter', sans-serif" font-size="11" font-weight="600">FAIL (Critique)</text>
+
+                    <!-- Feedback -> Generator -->
+                    <path d="M 270 270 L 135 270 L 135 180" stroke="#30363d" stroke-width="2" stroke-dasharray="4,4" />
+                    <path class="flow-path" d="M 270 270 L 135 270 L 135 180" stroke="#ff7b72" stroke-width="2" opacity="0.8" />
+                    <polygon points="135,180 130,190 140,190" fill="#ff7b72" />
+                    <text x="145" y="245" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" font-weight="500">Condition Retry</text>
+
+                    <!-- Generator Node -->
+                    <g transform="translate(80, 120)">
+                        <rect width="110" height="60" rx="8" fill="#161b22" stroke="var(--primary-color)" stroke-width="1.5" />
+                        <text x="55" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">Generator</text>
+                        <text x="55" y="44" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">LLM Synthesis</text>
+                    </g>
+
+                    <!-- Attempt Output Node -->
+                    <g transform="translate(270, 120)">
+                        <rect width="110" height="60" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5" class="active-node" />
+                        <text x="55" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">Candidate</text>
+                        <text x="55" y="44" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Attempt Output</text>
+                    </g>
+
+                    <!-- Critic / Verifier Node -->
+                    <g transform="translate(460, 120)">
+                        <rect width="110" height="60" rx="8" fill="#161b22" stroke="#d2a8ff" stroke-width="1.5" />
+                        <text x="55" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">Critic / Test</text>
+                        <text x="55" y="44" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Validation layer</text>
+                    </g>
+
+                    <!-- Feedback Store Node -->
+                    <g transform="translate(270, 240)">
+                        <rect width="110" height="60" rx="8" fill="#161b22" stroke="#ff7b72" stroke-width="1.5" />
+                        <text x="55" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">Feedback</text>
+                        <text x="55" y="44" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Episodic Memory</text>
+                    </g>
+
+                    <!-- Success State Node -->
+                    <g transform="translate(460, 20)">
+                        <rect width="110" height="50" rx="8" fill="#161b22" stroke="#39d353" stroke-width="1.5" />
+                        <text x="55" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">Final Output</text>
+                    </g>
+                </svg>
+            </div>
+
+            <p>Formalized under research paradigms like **Reflexion** <a href="#cite-1">[1]</a>, which models self-correction as verbal reinforcement learning, and **Self-Refine** <a href="#cite-2">[2]</a>, which demonstrates feedback loops on single outputs, this pattern mimics the human development cycle: write code, run tests, read exceptions, and repair the logic.</p>
+
+            <h2>Trade-offs</h2>
+            <p>Although reflection cycles are highly effective for correcting concrete bugs, they introduce specific trade-offs:</p>
+
+            <div class="tradeoffs-container">
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="var(--accent-color)" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Cheap & Training-Free
+                    </h4>
+                    <p>Enables model adaptation during inference. There is no need for costly parameter updates, fine-tuning, or retraining pipelines.</p>
+                </div>
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="var(--accent-color)" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Grounded Verification
+                    </h4>
+                    <p>Highly robust when critiques are anchored in deterministic outputs, such as compilation stack traces, validation logs, or unit test failures.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Illusory Self-Critique
+                    </h4>
+                    <p>Without external grounding (e.g. asking the model to evaluate its own textual output), correction rates drop. Models struggle to accurately judge their own generation biases.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Context Window Bloat & Instability
+                    </h4>
+                    <p>Repeated failures rapidly fill the context window with long exception traces. Furthermore, if a model mistakes an intermittent network glitch for a structural bug, it may rewrite working code.</p>
+                </div>
+            </div>
+
+            <h2>Known Uses</h2>
+            <p>Reflection is a key tool in software engineering agents and coding assistants:</p>
+            <ul>
+                <li><strong>Reflexion Framework:</strong> Integrates dynamic verbal reinforcement and memory buffers to let agents learn from failures in reasoning and coding benchmarks <a href="#cite-1">[1]</a>.</li>
+                <li><strong>Self-Refine:</strong> Standardizes a generator-refiner-critic loop to iterate on design documents, mathematical solutions, and script creation <a href="#cite-2">[2]</a>.</li>
+                <li><strong>Verifier/Sandbox Coding Loops:</strong> Production software agents (e.g. SWE-bench solvers) that write code, execute unit tests inside isolated sandboxes, capture standard error logs, and recursively patch the code until tests pass.</li>
+            </ul>
+
+            <h2 style="margin-top: 3rem;">References</h2>
+            <ul class="citation-list">
+                <li class="citation-item" id="cite-1">
+                    <span class="citation-number">[1]</span>
+                    <div class="citation-details">
+                        Shinn, N., Labash, B., & Gopinath, D. (2023).
+                        <strong>Reflexion: Language Agents with Systematic Self-Reflection.</strong>
+                        <em>Neural Information Processing Systems (NeurIPS)</em>.
+                        <br><a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2303.11366</a>
+                    </div>
+                </li>
+                <li class="citation-item" id="cite-2">
+                    <span class="citation-number">[2]</span>
+                    <div class="citation-details">
+                        Madaan, A., Tandon, N., Gupta, P., Hallinan, S., Nassar, L., Goldberg, P., ... & Clark, P. (2023).
+                        <strong>Self-Refine: Iterative Refinement with Self-Feedback.</strong>
+                        <em>Neural Information Processing Systems (NeurIPS)</em>.
+                        <br><a href="https://arxiv.org/abs/2303.17651" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2303.17651</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Agentic Protocols. All rights reserved. Designed by <a href="https://aksharpd.com" target="_blank" rel="noopener noreferrer">Akshar Prabhu Desai</a>.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
