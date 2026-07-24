@@ -15,6 +15,8 @@ Exposing open standards for AI agent integration, commerce, and payments.
 
 ## Articles & Architectural Patterns
 
+- [Interactive Patterns Catalog](https://agenticprotocols.dev/patterns.html): Interactive catalog of 20 recurring architectural designs classified in a four-axis space.
+
 ### Agentic Architectural Patterns
 - [Single Agent Patterns: Reason and Act Loop](https://agenticprotocols.dev/article-single-agent-patterns-reason-and-act-loop.html): Part 1 on interleaving thoughts and tool execution.
 - [Single Agent Patterns: Plan-Then-Execute](https://agenticprotocols.dev/article-single-agent-patterns-plan-then-execute.html): Part 2 on decoupling planning from execution for long-horizon coherence.
@@ -29,6 +31,7 @@ Exposing open standards for AI agent integration, commerce, and payments.
 
 ## Navigation & Research
 - [Home](https://agenticprotocols.dev/): Landing page and quick-start guides.
+- [Patterns](https://agenticprotocols.dev/patterns.html): Interactive catalog of 20 architectural patterns.
 - [Articles](https://agenticprotocols.dev/articles.html): Listing of all publications.
 - [Research](https://agenticprotocols.dev/research.html): Active research directions (secure sandboxes, inter-agent communication, stateful RAG).
 - [Learn](https://agenticprotocols.dev/learn.html): Open-source bootcamps and glossary definitions.
