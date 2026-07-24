@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --paper: var(--bg-color); /* #0d1117 */
@@ -48,7 +48,7 @@
         }
 
         h1, h2, h3, .disp {
-            font-family: "Archivo", system-ui, sans-serif;
+            font-family: var(--font-heading);
             font-variation-settings: "wdth" 118;
             font-weight: 800;
             letter-spacing: -.02em;
@@ -176,7 +176,7 @@
         }
 
         .readout .n {
-            font-family: "Archivo", sans-serif;
+            font-family: var(--font-heading);
             font-variation-settings: "wdth" 118;
             font-weight: 800;
             font-size: 46px;
@@ -582,7 +582,6 @@
                 <div class="eyebrow mono"><span>Pattern catalog</span><span>20 entries</span><span>Rev. 2026.1</span></div>
                 <h1>Architectural patterns for <em>agentic systems</em></h1>
                 <p class="standfirst">Twenty recurring designs, each at a fixed address in a four-axis space. Set the axes to where your problem lives and the catalog reorders by proximity; set a latency budget and everything too deep to fit falls away.</p>
-                <p class="source">After Prabhu Desai, <i>Architectural Patterns for Agentic AI Systems: A Survey and Taxonomy</i>. Failure modes and cost figures are editorial additions.</p>
 
                 <div class="instrument">
                     <div class="axes" id="axes"></div>
