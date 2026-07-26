@@ -7,6 +7,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://agenticprotocols.dev/article-multi-agent-patterns-orchestrator-worker.html</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://agenticprotocols.dev/article-single-agent-patterns-plan-then-execute.html</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
