@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Patterns: Role-Based Teams - Agentic Protocols</title>
+    <meta name="description"
+        content="An in-depth look at Role-Based Teams in multi-agent systems, detailing artifact-mediated communication, standard operating procedures, and process discipline.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* Rich Aesthetics Elements */
+        .intent-box {
+            background: linear-gradient(135deg, rgba(57, 211, 83, 0.05) 0%, rgba(139, 148, 158, 0.02) 100%);
+            border-left: 4px solid #39d353;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .intent-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(57, 211, 83, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intent-box h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .intent-box p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .react-svg {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        /* CSS animations for SVG flow line */
+        @keyframes dashflow {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .flow-path-forward {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.2s linear infinite;
+        }
+
+        .flow-path-feedback {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.5s linear infinite reverse;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(57, 211, 83, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 8px rgba(57, 211, 83, 0.8));
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(57, 211, 83, 0.4));
+            }
+        }
+
+        .active-node {
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+
+        /* Tradeoffs Grid layout */
+        .tradeoffs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .tradeoffs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tradeoff-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tradeoff-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(57, 211, 83, 0.4);
+        }
+
+        .tradeoff-card.pro {
+            border-left: 3px solid #39d353;
+        }
+
+        .tradeoff-card.con {
+            border-left: 3px solid #ff7b72;
+        }
+
+        .tradeoff-card h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tradeoff-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Citations list */
+        .citation-list {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin-top: 1.5rem;
+        }
+
+        .citation-item {
+            background-color: rgba(22, 27, 34, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .citation-number {
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .citation-details {
+            font-size: 0.95rem;
+        }
+
+        .citation-details a {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="patterns.html">Patterns</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-role-based-teams">
+            <span class="badge" style="background: rgba(57, 211, 83, 0.15); color: #39d353; border: 1px solid rgba(57, 211, 83, 0.3);">Multi-Agent Architectural Patterns • Part 3</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Multi-Agent Patterns: Role-Based Teams
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>July 30, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>4 min</strong></span>
+            </div>
+
+            <div class="intent-box">
+                <h3>Intent</h3>
+                <p>Mirror human organizational structure—product manager, architect, engineer, reviewer—to impose process discipline on complex production tasks.</p>
+            </div>
+
+            <h2>Introduction</h2>
+            <p>In unstructured multi-agent setups, open chat transcripts grow exponentially, causing conversational drift and token waste. Additionally, without structured coordination, agents frequently rewrite code fragments out of order, overriding valid logic. The <strong>Role-Based Teams</strong> pattern addresses these limitations by mapping human organizational workflows directly to agent collectives. By dividing complex software engineering and content-creation tasks into distinct personas, and structuring communication via intermediate documents (artifacts), this pattern introduces strict process discipline to multi-agent environments.</p>
+
+            <h2>Standard Operating Procedures and Artifacts</h2>
+            <p>Unlike conversational multi-agent systems, Role-Based Teams rely on two core design components:</p>
+            <ul>
+                <li><strong>Distinct Personas:</strong> Spawning agents with restricted role prompts (e.g., Product Manager, Architect, Coder, Reviewer). Persona scoping keeps each instance's system prompt small and focused.</li>
+                <li><strong>Artifact-Mediated Communication:</strong> Instead of raw, open-ended chat transcripts, agents exchange structured, read/write files (e.g., Product Requirement Documents - PRDs, System Designs, Source Files, Test Reports). The medium of coordination is also the final deliverable.</li>
+                <li><strong>Standard Operating Procedures (SOPs):</strong> Predefined execution pipelines (graphs or state machines) that determine which role is allowed to edit or review an artifact and at what time.</li>
+            </ul>
+
+            <div class="diagram-container">
+                <svg class="react-svg" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#21262d" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="350" fill="transparent" />
+                    <rect width="650" height="350" fill="url(#grid)" opacity="0.3" rx="8" />
+
+                    <!-- Connections and Labels -->
+                    <!-- Input -> PM -->
+                    <path d="M 15 130 L 30 130" stroke="#30363d" stroke-width="2" />
+                    <polygon points="30,130 22,126 22,134" fill="#30363d" />
+
+                    <!-- PM -> Architect -->
+                    <path d="M 130 130 L 180 130" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-forward" d="M 130 130 L 180 130" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="180,130 170,126 170,134" fill="var(--primary-color)" />
+                    <text x="155" y="115" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">PRD</text>
+
+                    <!-- Architect -> Coder -->
+                    <path d="M 280 130 L 330 130" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-forward" d="M 280 130 L 330 130" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="330,130 320,126 320,134" fill="var(--primary-color)" />
+                    <text x="305" y="115" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Spec</text>
+
+                    <!-- Coder -> Tester -->
+                    <path d="M 430 130 L 480 130" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-forward" d="M 430 130 L 480 130" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="480,130 470,126 470,134" fill="var(--primary-color)" />
+                    <text x="455" y="115" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Code</text>
+
+                    <!-- Tester -> Output -->
+                    <path d="M 580 130 L 635 130" stroke="#39d353" stroke-width="2" />
+                    <polygon points="635,130 625,126 625,134" fill="#39d353" />
+
+                    <!-- Revision Feedback Loop (Tester back to Coder) -->
+                    <path d="M 530 165 L 530 230 L 380 230 L 380 165" stroke="#ff7b72" stroke-width="1.5" stroke-dasharray="4,4" />
+                    <path class="flow-path-feedback" d="M 530 165 L 530 230 L 380 230 L 380 165" stroke="#ff7b72" stroke-width="1.5" />
+                    <polygon points="380,165 375,175 385,175" fill="#ff7b72" />
+                    <text x="455" y="220" fill="#ff7b72" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">REVISION LOOP (TEST FAILS)</text>
+
+                    <!-- PM Node -->
+                    <g transform="translate(30, 95)">
+                        <rect width="100" height="70" rx="8" fill="#161b22" stroke="#d2a8ff" stroke-width="1.5" />
+                        <text x="50" y="32" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">PM Agent</text>
+                        <text x="50" y="48" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Creates PRD</text>
+                    </g>
+
+                    <!-- Architect Node -->
+                    <g transform="translate(180, 95)">
+                        <rect width="100" height="70" rx="8" fill="#161b22" stroke="#58a6ff" stroke-width="1.5" />
+                        <text x="50" y="32" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Architect</text>
+                        <text x="50" y="48" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Creates API Spec</text>
+                    </g>
+
+                    <!-- Coder Node -->
+                    <g transform="translate(330, 95)">
+                        <rect width="100" height="70" rx="8" fill="#161b22" stroke="#39d353" stroke-width="1.5" class="active-node" />
+                        <text x="50" y="32" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Coder Agent</text>
+                        <text x="50" y="48" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Writes Logic</text>
+                    </g>
+
+                    <!-- Tester Node -->
+                    <g transform="translate(480, 95)">
+                        <rect width="100" height="70" rx="8" fill="#161b22" stroke="#ff7b72" stroke-width="1.5" />
+                        <text x="50" y="32" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Tester/Review</text>
+                        <text x="50" y="48" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Runs Tests</text>
+                    </g>
+                </svg>
+            </div>
+
+            <h2>Reducing Error Propagation</h2>
+            <p>In classical conversational multi-agent systems, if one agent introduces an error, other agents chat about it and copy the erroneous output into their own prompts, reinforcing the failure. In Role-Based Teams, communication is <strong>mediated by artifacts</strong>. Personas read from a common workspace directory or document set. The Coder agent reads the API specifications and the PM's PRD, writes code, and outputs a code file. The Tester agent executes unit tests against the code and outputs a test report. The Coder only looks at the test report to make edits, preventing conversational drift from inflating context windows.</p>
+
+            <h2>Trade-offs</h2>
+            <p>Mirroring human teams brings standard discipline, but carries specific engineering trade-offs:</p>
+
+            <div class="tradeoffs-container">
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Strict Process Discipline
+                    </h4>
+                    <p>Standardizes development lifecycle, reducing chat drift and token waste by exchanging structured files instead of open dialogue transcripts.</p>
+                </div>
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Persona Context Scoping
+                    </h4>
+                    <p>Keeps individual system prompts concise and domain-specific, which improves model focus and instruction-following accuracy.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Workflow Rigidity
+                    </h4>
+                    <p>If a task does not match the hard-coded pipeline, the static workflow breaks or stalls, failing to adapt like flexible single-agent loops.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Role-Multiplicity Overhead
+                    </h4>
+                    <p>Without standard operating structures and verified compilation schemas, adding more roles does not help and underperforms a strong single agent.</p>
+                </div>
+            </div>
+
+            <h2>Known Uses</h2>
+            <p>This pattern is widely used in code-generation and organizational simulations:</p>
+            <ul>
+                <li><strong>MetaGPT:</strong> Spawns distinct agents mapped to product managers, architects, code developers, and QA engineers, communicating via software-design documents <a href="#cite-1">[1]</a>.</li>
+                <li><strong>ChatDev:</strong> An interactive virtual software developer company model where multiple role-playing agents collaborate in a sequential pipeline to develop apps <a href="#cite-2">[2]</a>.</li>
+                <li><strong>CAMEL Framework:</strong> Explores communicative agent societies using role-playing prompts to solve specific tasks through structured consensus <a href="#cite-3">[3]</a>.</li>
+            </ul>
+
+            <h2 style="margin-top: 3rem;">References</h2>
+            <ul class="citation-list">
+                <li class="citation-item" id="cite-1">
+                    <span class="citation-number">[1]</span>
+                    <div class="citation-details">
+                        Hong, S., Zheng, M., Chen, J., Wang, Y., Wang, C., Zhao, C., ... & Zhou, H. (2024).
+                        <strong>MetaGPT: Meta Programming for a Multi-Agent Collaborative Framework.</strong>
+                        <em>International Conference on Learning Representations (ICLR)</em>.
+                        <br><a href="https://arxiv.org/abs/2308.08155" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2308.08155</a>
+                    </div>
+                </li>
+                <li class="citation-item" id="cite-2">
+                    <span class="citation-number">[2]</span>
+                    <div class="citation-details">
+                        Qian, C., Cong, X., Yang, C., Chen, W., Su, Y., Xu, J., ... & Sun, M. (2024).
+                        <strong>ChatDev: Communicative Agents for Software Development.</strong>
+                        <em>Proc. 62nd Annu. Meeting Assoc. Comput. Linguistics (ACL)</em>.
+                        <br><a href="https://arxiv.org/abs/2307.07924" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2307.07924</a>
+                    </div>
+                </li>
+                <li class="citation-item" id="cite-3">
+                    <span class="citation-number">[3]</span>
+                    <div class="citation-details">
+                        Li, G., Hammoud, H. I., Itani, D., Khizbullin, D., & Ghanem, B. (2023).
+                        <strong>CAMEL: Communicative Agents for "Mind" Exploration of Large Language Model Society.</strong>
+                        <em>Advances in Neural Information Processing Systems (NeurIPS)</em>.
+                        <br><a href="https://arxiv.org/abs/2303.17760" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2303.17760</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>

@@ -19,6 +19,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://agenticprotocols.dev/article-multi-agent-patterns-role-based-teams.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://agenticprotocols.dev/article-single-agent-patterns-plan-then-execute.html</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
