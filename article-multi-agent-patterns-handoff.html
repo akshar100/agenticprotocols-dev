@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Patterns: Handoff - Agentic Protocols</title>
+    <meta name="description"
+        content="A detailed guide to the Handoff pattern in multi-agent architectures, exploring agent specialization, context routing, and the trade-offs of light-weight orchestration.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* Rich Aesthetics Elements */
+        .intent-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.05) 0%, rgba(139, 148, 158, 0.02) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .intent-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intent-box h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .intent-box p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .react-svg {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        /* CSS animations for SVG flow line */
+        @keyframes dashflow {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .flow-path-initial {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.5s linear infinite;
+        }
+
+        .flow-path-handoff {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.2s linear infinite;
+        }
+
+        .flow-path-final {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.5s linear infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.8));
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+        }
+
+        .active-node {
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+
+        /* Tradeoffs Grid layout */
+        .tradeoffs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .tradeoffs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tradeoff-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tradeoff-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(88, 166, 255, 0.4);
+        }
+
+        .tradeoff-card.pro {
+            border-left: 3px solid #39d353;
+        }
+
+        .tradeoff-card.con {
+            border-left: 3px solid #ff7b72;
+        }
+
+        .tradeoff-card h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tradeoff-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Citations list */
+        .citation-list {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin-top: 1.5rem;
+        }
+
+        .citation-item {
+            background-color: rgba(22, 27, 34, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .citation-number {
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .citation-details {
+            font-size: 0.95rem;
+        }
+
+        .citation-details a {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="patterns.html">Patterns</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-handoff">
+            <span class="badge" style="background: rgba(88, 166, 255, 0.15); color: var(--primary-color); border: 1px solid rgba(88, 166, 255, 0.3);">Multi-Agent Architectural Patterns • Part 5</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Multi-Agent Patterns: Handoff
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>August 9, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>4 min</strong></span>
+            </div>
+
+            <div class="intent-box">
+                <h3>Intent</h3>
+                <p>Transfer control of a live interaction between specialized agents while preserving necessary context—triage routing a customer to billing or technical support.</p>
+            </div>
+
+            <h2>Introduction</h2>
+            <p>Monolithic agents designed to handle everything often fail because their prompts contain too many instructions and too many tool schemas. When a single model has to choose between 40 different tools and read a 200-line prompt, its accuracy drops, and it is more likely to invoke the wrong tool. The <strong>Handoff</strong> pattern resolves this by breaking a monolithic agent into a network of small, specialized agents. Instead of running a complex routing workflow, agents are given a first-class primitive: the ability to execute a tool that transfers control to a successor agent.</p>
+
+            <h2>The Routing Tool Primitive</h2>
+            <p>In a handoff architecture, the transition from one agent to another is managed dynamically by the models themselves:</p>
+            <ul>
+                <li><strong>Specialized Agents:</strong> Each agent is designed for a single topic (e.g., Triage, Billing, Technical Support, Returns). They have tiny system prompts and only the specific tools they need.</li>
+                <li><strong>Handoff Tools:</strong> Agents are configured with tool schemas that act as handoff mechanisms. For example, the Triage agent has a tool named <code>handoff_to_billing()</code>.</li>
+                <li><strong>Context Transfer:</strong> When an agent calls a handoff tool, the orchestration framework intercepts the request, pauses the current agent session, packages the conversation state (either full history or a distilled summary), and instantiates the successor agent.</li>
+            </ul>
+
+            <div class="diagram-container">
+                <svg class="react-svg" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#21262d" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="350" fill="transparent" />
+                    <rect width="650" height="350" fill="url(#grid)" opacity="0.3" rx="8" />
+
+                    <!-- User to Triage (Initial Chat) -->
+                    <path d="M 140 100 L 230 75" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-initial" d="M 140 100 L 230 75" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="230,75 220,70 222,80" fill="var(--primary-color)" />
+
+                    <path d="M 230 90 L 140 115" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-initial" d="M 230 90 L 140 115" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="140,115 150,120 148,110" fill="var(--primary-color)" />
+                    <text x="185" y="65" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">1. Initial Request</text>
+
+                    <!-- Triage executing Handoff to Billing -->
+                    <path d="M 350 75 L 460 120" stroke="#f0883e" stroke-width="2" />
+                    <path class="flow-path-handoff" d="M 350 75 L 460 120" stroke="#f0883e" stroke-width="2" opacity="0.8" />
+                    <polygon points="460,120 450,113 454,123" fill="#f0883e" />
+                    <text x="405" y="85" fill="#f0883e" font-family="'Inter', sans-serif" font-size="10" font-weight="600" text-anchor="middle">2. handoff_to_billing()</text>
+
+                    <!-- Direct active session (User <-> Billing) -->
+                    <path d="M 140 185 L 460 185" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-final" d="M 140 185 L 460 185" stroke="#39d353" stroke-width="2" opacity="0.8" />
+                    <polygon points="460,185 450,180 450,190" fill="#39d353" />
+                    <polygon points="140,185 150,180 150,190" fill="#39d353" />
+                    <text x="300" y="210" fill="#39d353" font-family="'Inter', sans-serif" font-size="10" font-weight="600" text-anchor="middle">3. Active Handoff Session</text>
+
+                    <!-- User Node -->
+                    <g transform="translate(40, 100)">
+                        <rect width="100" height="100" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+                        <text x="50" y="45" fill="#fff" font-family="'Inter', sans-serif" font-size="14" font-weight="800" text-anchor="middle">User</text>
+                        <text x="50" y="65" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Live Chat</text>
+                    </g>
+
+                    <!-- Triage Agent Node -->
+                    <g transform="translate(230, 40)">
+                        <rect width="120" height="70" rx="8" fill="#161b22" stroke="#58a6ff" stroke-width="1.5" />
+                        <text x="60" y="32" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">Triage Agent</text>
+                        <text x="60" y="48" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Classifies Request</text>
+                    </g>
+
+                    <!-- Billing Agent Node -->
+                    <g transform="translate(460, 100)">
+                        <rect width="120" height="100" rx="8" fill="#161b22" stroke="#39d353" stroke-width="2" class="active-node" />
+                        <text x="60" y="45" fill="#fff" font-family="'Inter', sans-serif" font-size="13" font-weight="800" text-anchor="middle">Billing Agent</text>
+                        <text x="60" y="65" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Billing Context</text>
+                        <text x="60" y="78" fill="#39d353" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">ACTIVE AGENT</text>
+                    </g>
+                </svg>
+            </div>
+
+            <h2>Context Preservation vs. Context Filtering</h2>
+            <p>When handoff occurs, the orchestration framework must decide how much conversation history to pass to the successor agent:</p>
+            <ul>
+                <li><strong>Full Context Handoff:</strong> The entire message history is passed to the successor. This prevents the successor from repeating questions, but reintroduces the context window pressure the handoff pattern was meant to solve.</li>
+                <li><strong>Filtered/Summarized Handoff:</strong> The triage agent generates a structured summary of the user's intent and details (e.g., <code>{ "user_id": "104", "issue": "double charge on July bill" }</code>). Only this JSON summary and the active message are passed to the Billing agent. This keeps the successor's context clean, but can lead to information loss if details are omitted during synthesis.</li>
+            </ul>
+
+            <h2>Trade-offs</h2>
+            <p>Handoffs enable lightweight, highly modular architectures, but shift the engineering challenge to transition boundaries:</p>
+
+            <div class="tradeoffs-container">
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        High Model Focus & Accuracy
+                    </h4>
+                    <p>Keeping prompts and toolsets small makes models highly accurate at choosing tools and following instructions.</p>
+                </div>
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Easy Developer Maintenance
+                    </h4>
+                    <p>Adding new capabilities is as simple as writing a new specialized agent and adding its handoff tool to the triage list.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Context Transfer Complexity
+                    </h4>
+                    <p>Deciding how much context to pass is a major design challenge: too little and the agent repeats questions; too much and isolation benefits disappear.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Routing Loops
+                    </h4>
+                    <p>Without strict limits, agents can route a user back and forth in an infinite loop (e.g. Triage -> Tech -> Returns -> Triage).</p>
+                </div>
+            </div>
+
+            <h2>Known Uses</h2>
+            <p>Handoffs have become a primary design pattern in modern agentic customer support and developer SDKs:</p>
+            <ul>
+                <li><strong>OpenAI Swarm:</strong> A lightweight multi-agent orchestration framework that treats agents and handoffs as first-class primitives <a href="#cite-1">[1]</a>.</li>
+                <li><strong>Agent2Agent (A2A) Protocol:</strong> An open protocol standardizing how agents discover each other and hand off tasks across process and organizational boundaries <a href="#cite-2">[2]</a>.</li>
+                <li><strong>Customer Support Routing:</strong> Production systems that triage incoming tickets and hand them off to specialized refund, billing, or tech agents.</li>
+            </ul>
+
+            <h2 style="margin-top: 3rem;">References</h2>
+            <ul class="citation-list">
+                <li class="citation-item" id="cite-1">
+                    <span class="citation-number">[1]</span>
+                    <div class="citation-details">
+                        OpenAI. (2024).
+                        <strong>Swarm: An Educational Framework for Exploring Multi-Agent Orchestration.</strong>
+                        <em>GitHub Repository</em>.
+                        <br><a href="https://github.com/openai/swarm" target="_blank" rel="noopener noreferrer">https://github.com/openai/swarm</a>
+                    </div>
+                </li>
+                <li class="citation-item" id="cite-2">
+                    <span class="citation-number">[2]</span>
+                    <div class="citation-details">
+                        Google. (2025).
+                        <strong>Agent2Agent (A2A) Protocol Specification.</strong>
+                        <em>Open Web Spec Documentation</em>.
+                        <br><a href="https://a2a-protocol.org" target="_blank" rel="noopener noreferrer">https://a2a-protocol.org</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
