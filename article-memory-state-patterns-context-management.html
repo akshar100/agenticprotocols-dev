@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory and State Patterns: Context Window Management - Agentic Protocols</title>
+    <meta name="description"
+        content="An in-depth look at Context Window Management for AI agents, covering trajectory compaction, observation truncation, and structured scratchpads.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* Rich Aesthetics Elements */
+        .intent-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.05) 0%, rgba(139, 148, 158, 0.02) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .intent-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intent-box h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .intent-box p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .react-svg {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        /* CSS animations for SVG flow line */
+        @keyframes dashflow {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .flow-path-to {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.5s linear infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.8));
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+        }
+
+        .active-node {
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+
+        /* Tradeoffs Grid layout */
+        .tradeoffs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .tradeoffs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tradeoff-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tradeoff-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(88, 166, 255, 0.4);
+        }
+
+        .tradeoff-card.pro {
+            border-left: 3px solid #39d353;
+        }
+
+        .tradeoff-card.con {
+            border-left: 3px solid #ff7b72;
+        }
+
+        .tradeoff-card h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tradeoff-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Citations list */
+        .citation-list {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin-top: 1.5rem;
+        }
+
+        .citation-item {
+            background-color: rgba(22, 27, 34, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .citation-number {
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .citation-details {
+            font-size: 0.95rem;
+        }
+
+        .citation-details a {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="patterns.html">Patterns</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-context-management">
+            <span class="badge" style="background: rgba(88, 166, 255, 0.15); color: var(--primary-color); border: 1px solid rgba(88, 166, 255, 0.3);">Memory and State Patterns • Part 1</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Memory Patterns: Context Window Management
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>August 13, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>4 min</strong></span>
+            </div>
+
+            <div class="intent-box">
+                <h3>Intent</h3>
+                <p>Manage the agent's limited working memory dynamically to control token costs and prevent information loss.</p>
+            </div>
+
+            <h2>Introduction</h2>
+            <p>In autonomous agent design, the context window is the model's immediate working memory. Unlike human memory, which compresses and digests information naturally, a language model's context is rigid and finite. Every tool call, environment response, and reasoning chain consumes tokens. If left unmanaged, the context window fills with raw logs, causing exponential latency increases, massive token bills, and attention degradation. <strong>Context Window Management</strong> is the architectural practice of selecting, summarizing, and truncating information to present the model with a highly optimized working memory.</p>
+
+            <h2>Core Context Management Techniques</h2>
+            <p>Rather than leaving context growth to chance, modern orchestration layers implement three standard techniques:</p>
+            <ul>
+                <li><strong>Trajectory Compaction:</strong> Periodically summarizing older segments of the dialogue transcript. The harness prompts an LLM to distill past steps into a concise summary, replacing many pages of chat history with a few sentences, while preserving critical decisions and active constraints.</li>
+                <li><strong>Observation Truncation:</strong> Restricting the raw size of tool outputs before they enter the prompt. For example, if a tool outputs a 50KB code file or database log, the harness truncates the text, saves the full content externally, and injects only a small representative excerpt into the active window.</li>
+                <li><strong>Structured Scratchpads:</strong> Requiring the agent to maintain its own state summary (such as a running tasks file or a list of discovered bugs) in a dedicated text file. The agent reads and rewires this scratchpad at each step, maintaining high-level focus independently of the chat log.</li>
+            </ul>
+
+            <div class="diagram-container">
+                <svg class="react-svg" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#21262d" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="350" fill="transparent" />
+                    <rect width="650" height="350" fill="url(#grid)" opacity="0.3" rx="8" />
+
+                    <!-- Inputs -> Processors -->
+                    <path d="M 160 80 L 230 75" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-to" d="M 160 80 L 230 75" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="230,75 220,70 222,80" fill="var(--primary-color)" />
+
+                    <path d="M 160 120 L 230 145" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-to" d="M 160 120 L 230 145" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="230,145 222,140 220,150" fill="var(--primary-color)" />
+
+                    <!-- Processors -> Active Context -->
+                    <path d="M 350 75 L 440 90" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-to" d="M 350 75 L 440 90" stroke="#39d353" stroke-width="1.5" />
+                    <polygon points="440,90 430,85 432,95" fill="#39d353" />
+
+                    <path d="M 350 145 L 440 130" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-to" d="M 350 145 L 440 130" stroke="#39d353" stroke-width="1.5" />
+                    <polygon points="440,130 432,125 430,135" fill="#39d353" />
+
+                    <!-- Active Context -> LLM -->
+                    <path d="M 510 180 L 510 260 L 370 260" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-to" d="M 510 180 L 510 260 L 370 260" stroke="#d2a8ff" stroke-width="1.5" />
+                    <polygon points="370,260 380,255 380,265" fill="#d2a8ff" />
+
+                    <!-- Raw History Stream Node -->
+                    <g transform="translate(40, 50)">
+                        <rect width="120" height="100" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+                        <text x="60" y="35" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Raw Stream</text>
+                        <text x="60" y="55" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Chat Logs</text>
+                        <text x="60" y="70" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Tool Outputs</text>
+                        <text x="60" y="85" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">System Prompts</text>
+                    </g>
+
+                    <!-- Compaction Node -->
+                    <g transform="translate(230, 45)">
+                        <rect width="120" height="50" rx="6" fill="#161b22" stroke="var(--primary-color)" stroke-width="1.5" />
+                        <text x="60" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle">1. Compaction</text>
+                        <text x="60" y="40" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Summarize History</text>
+                    </g>
+
+                    <!-- Truncation Node -->
+                    <g transform="translate(230, 120)">
+                        <rect width="120" height="50" rx="6" fill="#161b22" stroke="var(--primary-color)" stroke-width="1.5" />
+                        <text x="60" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle">2. Truncation</text>
+                        <text x="60" y="40" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Excerpt Logs</text>
+                    </g>
+
+                    <!-- Optimized Active Context Node -->
+                    <g transform="translate(440, 70)">
+                        <rect width="140" height="110" rx="8" fill="#161b22" stroke="#39d353" stroke-width="2" class="active-node" />
+                        <text x="70" y="32" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="800" text-anchor="middle">Active Context</text>
+                        <text x="70" y="52" fill="#39d353" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Optimized Prompt</text>
+                        <text x="70" y="70" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">- Core Constraints</text>
+                        <text x="70" y="82" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">- Distilled Summary</text>
+                        <text x="70" y="94" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">- Scratchpad State</text>
+                    </g>
+
+                    <!-- LLM Node -->
+                    <g transform="translate(230, 230)">
+                        <rect width="140" height="60" rx="8" fill="#161b22" stroke="#d2a8ff" stroke-width="1.5" />
+                        <text x="70" y="28" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">LLM Inference</text>
+                        <text x="70" y="44" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Next Action / Thought</text>
+                    </g>
+                </svg>
+            </div>
+
+            <h2>The Retention vs. Compaction Trade-off</h2>
+            <p>Managing the context window is a balancing act between information density and attention clarity. If the orchestration layer compacts the history too aggressively, it risks throwing away subtle details—such as warnings from tools or earlier user constraints—which causes the model to repeat errors. Conversely, if it retains too much detail, token costs rise and the model's attention is distracted by noise, leading to hallucinations.</p>
+            <p>Empirical evidence in production coding environments indicates that <strong>preserving decisions, structural boundaries, and unresolved errors verbatim</strong> while aggressively summarizing raw data observations yields the best results.</p>
+
+            <h2>Trade-offs</h2>
+            <p>This pattern is essential for long-horizon agent stability, but introduces specific trade-offs:</p>
+
+            <div class="tradeoffs-container">
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Token Cost Control
+                    </h4>
+                    <p>Prevents exponential cost scaling by keeping the active context window size bounded, even over hundreds of execution steps.</p>
+                </div>
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Improved Instruction Focus
+                    </h4>
+                    <p>Clearing out irrelevant tool output logs helps the model focus on core instructions and the next active task.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Information Loss
+                    </h4>
+                    <p>Summarization can drop crucial context, causing the agent to repeat failed commands or lose track of specific user instructions.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Summarization Overhead
+                    </h4>
+                    <p>Running separate compaction passes requires extra model calls, introducing latency and computational costs that offset token savings.</p>
+                </div>
+            </div>
+
+            <h2>Known Uses</h2>
+            <p>Context window engineering is a prerequisite in production-grade agents:</p>
+            <ul>
+                <li><strong>MemGPT:</strong> Manages agent memory as a structured operating system, paging information in and out of active context via tool calls <a href="#cite-1">[1]</a>.</li>
+                <li><strong>Reflexion:</strong> Distills past mistakes and lessons learned into verbal summaries stored in episodic memory to condition future attempts <a href="#cite-2">[2]</a>.</li>
+                <li><strong>SWE-bench coding agents:</strong> Production agents maintain interactive scratchpads (e.g. TODO lists, file changes) in external text files, re-reading them to prevent long git diffs from overloading their context.</li>
+            </ul>
+
+            <h2 style="margin-top: 3rem;">References</h2>
+            <ul class="citation-list">
+                <li class="citation-item" id="cite-1">
+                    <span class="citation-number">[1]</span>
+                    <div class="citation-details">
+                        Packer, C., Wooders, S., Lin, K., Fang, V., Patil, S. G., Stoica, I., & Gonzalez, J. E. (2023).
+                        <strong>MemGPT: Towards LLMs as Operating Systems.</strong>
+                        <em>arXiv preprint arXiv:2310.08560</em>.
+                        <br><a href="https://arxiv.org/abs/2310.08560" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2310.08560</a>
+                    </div>
+                </li>
+                <li class="citation-item" id="cite-2">
+                    <span class="citation-number">[2]</span>
+                    <div class="citation-details">
+                        Shinn, N., Cassano, F., Gopinath, A., Narasimhan, K., & Yao, S. (2023).
+                        <strong>Reflexion: Language Agents with Verbal Reinforcement Learning.</strong>
+                        <em>Advances in Neural Information Processing Systems (NeurIPS)</em>.
+                        <br><a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2303.11366</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
