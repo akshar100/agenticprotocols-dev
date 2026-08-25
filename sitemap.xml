@@ -7,6 +7,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://agenticprotocols.dev/article-interaction-patterns-hitl.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://agenticprotocols.dev/article-interaction-patterns-protocols.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://agenticprotocols.dev/article-memory-state-patterns-checkpointing.html</loc>
     <lastmod>2026-08-22</lastmod>
     <changefreq>monthly</changefreq>

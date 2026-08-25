@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaction and Integration Patterns: Human-in-the-Loop Placements - Agentic Protocols</title>
+    <meta name="description"
+        content="A detailed guide to Human-in-the-Loop (HITL) placements in agentic systems, exploring approval gates, confidence-based escalation, steering, and outcome reviews.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* Rich Aesthetics Elements */
+        .intent-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.05) 0%, rgba(139, 148, 158, 0.02) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .intent-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intent-box h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .intent-box p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .react-svg {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        /* CSS animations for SVG flow line */
+        @keyframes dashflow {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .flow-path-to {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.5s linear infinite;
+        }
+
+        .flow-path-from {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.5s linear infinite reverse;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.8));
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+        }
+
+        .active-node {
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+
+        /* Tradeoffs Grid layout */
+        .tradeoffs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .tradeoffs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tradeoff-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tradeoff-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(88, 166, 255, 0.4);
+        }
+
+        .tradeoff-card.pro {
+            border-left: 3px solid #39d353;
+        }
+
+        .tradeoff-card.con {
+            border-left: 3px solid #ff7b72;
+        }
+
+        .tradeoff-card h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tradeoff-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Citations list */
+        .citation-list {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin-top: 1.5rem;
+        }
+
+        .citation-item {
+            background-color: rgba(22, 27, 34, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .citation-number {
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .citation-details {
+            font-size: 0.95rem;
+        }
+
+        .citation-details a {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="patterns.html">Patterns</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-hitl">
+            <span class="badge" style="background: rgba(88, 166, 255, 0.15); color: var(--primary-color); border: 1px solid rgba(88, 166, 255, 0.3);">Interaction & Integration Patterns • Part 1</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Interaction Patterns: Human-in-the-Loop Placements
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>August 25, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>4 min</strong></span>
+            </div>
+
+            <div class="intent-box">
+                <h3>Intent</h3>
+                <p>Human involvement (dimension D4) is not binary but positional. Recurring placements: approval gates, in which designated tool calls (payments, deletions, deployments) suspend execution pending confirmation; escalation, in which the agent itself decides to consult a human when confidence is low or authority is exceeded; steering, in which humans can inject guidance at checkpoints without halting the run; and outcome review, in which autonomy is full but deliverables are audited before use.</p>
+            </div>
+
+            <h2>Introduction</h2>
+            <p>In classical AI agent implementations, human involvement is often treated as a binary choice: either the system runs with absolute, unmonitored autonomy, or it is restricted to single-shot Q&A interactions. In complex production tasks, neither extreme is acceptable. Full autonomy risks catastrophic tool errors, while constant prompting defeats the purpose of automation. The <strong>Human-in-the-Loop (HITL) Placements</strong> pattern resolves this by defining structured, positional roles for humans inside the execution loop, backed by persistent checkpoint databases.</p>
+
+            <h2>Four Placements of Human Involvement</h2>
+            <p>We classify human integration into four distinct design placements based on where and how the human interacts with the loop:</p>
+            <ul>
+                <li><strong>Approval Gates (Critical Actions):</strong> The agent runs autonomously until it proposes an irreversible action (e.g., executing a bank payment, deleting database rows, or deploying code). The runtime suspends execution, persists state, and awaits explicit human confirmation.</li>
+                <li><strong>Escalation (Confidence Fallback):</strong> The agent monitors its own confidence or error rates. If confidence drops below a threshold, or if it encounters a schema parsing failure, the agent invokes an escalation tool to request help from a human coordinator.</li>
+                <li><strong>Steering (Active Guidance):</strong> A checkpoint pause gate allowing humans to inject guidance or correct the plan's direction at key steps without terminating the run.</li>
+                <li><strong>Outcome Review (Deliverable Audit):</strong> The agent operates with full autonomy, but final deliverables are saved to a review staging directory for audit before being released.</li>
+            </ul>
+
+            <div class="diagram-container">
+                <svg class="react-svg" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#21262d" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="350" fill="transparent" />
+                    <rect width="650" height="350" fill="url(#grid)" opacity="0.3" rx="8" />
+
+                    <!-- Connections -->
+                    <!-- Agent -> Pause Gate -->
+                    <path d="M 170 175 L 260 175" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-to" d="M 170 175 L 260 175" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="260,175 250,170 250,180" fill="var(--primary-color)" />
+                    <text x="215" y="160" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Execute Gate</text>
+
+                    <!-- Pause Gate -> Human User -->
+                    <path d="M 380 160 C 410 140, 440 140, 460 155" stroke="#30363d" stroke-width="1.5" />
+                    <path class="flow-path-to" d="M 380 160 C 410 140, 440 140, 460 155" stroke="#f0883e" stroke-width="1.5" opacity="0.8" />
+                    <polygon points="460,155 450,150 452,160" fill="#f0883e" />
+                    <text x="420" y="130" fill="#f0883e" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Request Approval</text>
+
+                    <!-- Human User -> Pause Gate (Decision) -->
+                    <path d="M 460 195 C 440 210, 410 210, 380 190" stroke="#30363d" stroke-width="1.5" />
+                    <path class="flow-path-from" d="M 460 195 C 440 210, 410 210, 380 190" stroke="#39d353" stroke-width="1.5" opacity="0.8" />
+                    <polygon points="380,190 390,195 388,185" fill="#39d353" />
+                    <text x="420" y="225" fill="#39d353" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Resume Decision</text>
+
+                    <!-- Pause Gate -> Resume Agent -->
+                    <path d="M 260 215 L 120 215 L 120 215" stroke="#39d353" stroke-width="2" stroke-dasharray="4,4" />
+                    <path class="flow-path-from" d="M 260 215 L 120 215 L 120 215" stroke="#39d353" stroke-width="2" />
+                    <polygon points="120,215 130,210 130,220" fill="#39d353" />
+
+                    <!-- Agent Core Node -->
+                    <g transform="translate(40, 135)">
+                        <rect width="130" height="90" rx="8" fill="#161b22" stroke="var(--primary-color)" stroke-width="1.5" />
+                        <text x="65" y="35" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Agent Core</text>
+                        <text x="65" y="55" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Reasoning Loop</text>
+                        <text x="65" y="72" fill="var(--primary-color)" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Active Run</text>
+                    </g>
+
+                    <!-- Pause Gate Node -->
+                    <g transform="translate(260, 135)">
+                        <rect width="120" height="90" rx="8" fill="#161b22" stroke="#d2a8ff" stroke-width="2" class="active-node" />
+                        <text x="60" y="35" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="800" text-anchor="middle">Approval Gate</text>
+                        <text x="60" y="55" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">State Checkpoint</text>
+                        <text x="60" y="72" fill="#d2a8ff" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">SUSPENDED</text>
+                    </g>
+
+                    <!-- Human User Node -->
+                    <g transform="translate(460, 135)">
+                        <rect width="130" height="90" rx="8" fill="#161b22" stroke="#39d353" stroke-width="1.5" />
+                        <text x="65" y="35" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Human User</text>
+                        <text x="65" y="55" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Audit Dashboard</text>
+                        <text x="65" y="72" fill="#39d353" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Approve/Deny</text>
+                    </g>
+                </svg>
+            </div>
+
+            <h2>Why Interruptibility Mandates Checkpointing</h2>
+            <p>In production applications, blocking an active execution thread to await user feedback causes memory leaks, system timeouts, and connection errors. The key architectural insight is that <strong>human involvement requires checkpointing</strong>. Instead of blocking the runtime process, when an approval gate is reached, the agent writes its full state snapshot to a persistent store and terminates. The human interacts with the data asynchronously. When they submit a decision, the host spins up a new process, deserializes the checkpoint, and resumes execution seamlessly.</p>
+
+            <h2>Trade-offs</h2>
+            <p>Implementing structured HITL placements yields massive safety, but impacts execution latency:</p>
+
+            <div class="tradeoffs-container">
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Critical Error Prevention
+                    </h4>
+                    <p>Approval gates prevent catastrophic actions (e.g., unauthorized payments or file deletions) before they can occur.</p>
+                </div>
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Improved Steering & Control
+                    </h4>
+                    <p>Allows human subject-matter experts to correct plans and inject guidelines at key points, guiding the agent's reasoning path.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Execution Latency
+                    </h4>
+                    <p>Halting for human interaction introduces massive delays. Runs that could finish in seconds might take hours awaiting approval.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Interruption Fatigue
+                    </h4>
+                    <p>If approval gates trigger on trivial actions, human operators experience cognitive fatigue and start clicking "Approve" blindly.</p>
+                </div>
+            </div>
+
+            <h2>Known Uses</h2>
+            <p>HITL design is standard across enterprise-grade agent runtimes:</p>
+            <ul>
+                <li><strong>LangGraph state savers:</strong> Persistent checkpointers that pause agent threads, waiting for a human API post to approve/modify state <a href="#cite-1">[1]</a>.</li>
+                <li><strong>SWE-bench test suites:</strong> Coding agents that draft edits and pause to request human validation before committing pull requests.</li>
+            </ul>
+
+            <h2 style="margin-top: 3rem;">References</h2>
+            <ul class="citation-list">
+                <li class="citation-item" id="cite-1">
+                    <span class="citation-number">[1]</span>
+                    <div class="citation-details">
+                        LangChain. (2024).
+                        <strong>LangGraph: Building Stateful, Multi-Agent Applications with Graph-based Control Flow.</strong>
+                        <em>Framework Documentation</em>.
+                        <br><a href="https://langchain-ai.github.io/langgraph/" target="_blank" rel="noopener noreferrer">https://langchain-ai.github.io/langgraph/</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
