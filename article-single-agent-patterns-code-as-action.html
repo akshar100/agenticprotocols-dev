@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Agent Patterns: Code as Action - Agentic Protocols</title>
+    <meta name="description"
+        content="A detailed guide to the Code as Action pattern in single-agent architectures, exploring executable code action spaces, collapsing tool round-trips, and precision computation.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* Rich Aesthetics Elements */
+        .intent-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.05) 0%, rgba(139, 148, 158, 0.02) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .intent-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intent-box h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .intent-box p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .react-svg {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        /* CSS animations for SVG flow line */
+        @keyframes dashflow {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .flow-path-to {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.5s linear infinite;
+        }
+
+        .flow-path-from {
+            stroke-dasharray: 6, 4;
+            animation: dashflow 1.5s linear infinite reverse;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.8));
+            }
+
+            100% {
+                filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.4));
+            }
+        }
+
+        .active-node {
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+
+        /* Tradeoffs Grid layout */
+        .tradeoffs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .tradeoffs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tradeoff-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tradeoff-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(88, 166, 255, 0.4);
+        }
+
+        .tradeoff-card.pro {
+            border-left: 3px solid #39d353;
+        }
+
+        .tradeoff-card.con {
+            border-left: 3px solid #ff7b72;
+        }
+
+        .tradeoff-card h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tradeoff-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Citations list */
+        .citation-list {
+            list-style: none !important;
+            padding-left: 0 !important;
+            margin-top: 1.5rem;
+        }
+
+        .citation-item {
+            background-color: rgba(22, 27, 34, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .citation-number {
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .citation-details {
+            font-size: 0.95rem;
+        }
+
+        .citation-details a {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Agentic Protocols</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="patterns.html">Patterns</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="articles.html"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to Articles
+            </a>
+        </div>
+
+        <article class="article-content" id="article-code-as-action">
+            <span class="badge" style="background: rgba(88, 166, 255, 0.15); color: var(--primary-color); border: 1px solid rgba(88, 166, 255, 0.3);">Single Agent Patterns • Part 5</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Single Agent Patterns: Code as Action
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>September 1, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>5 min</strong></span>
+            </div>
+
+            <div class="intent-box">
+                <h3>Intent</h3>
+                <p>Use executable code rather than a fixed tool vocabulary as the agent's action space. Because code composes—loops, conditionals, variables—a single action can express what would otherwise take many discrete tool calls.</p>
+            </div>
+
+            <h2>Introduction</h2>
+            <p>Traditional agent architectures rely on a predefined JSON tool schema vocabulary (e.g., <code>search_web()</code>, <code>fetch_url()</code>, <code>calc()</code>). When a task requires iterating through 50 data records, filtering items, and aggregating numerical statistics, a standard ReAct loop must make 50 individual LLM reasoning turns—one for each tool invocation. This results in extreme latency, massive token consumption, and risk of context drift. The <strong>Code as Action</strong> pattern replaces rigid tool calls by empowering the agent to write and execute full code scripts (such as Python or JavaScript) directly in a runtime interpreter, turning code itself into the action space.</p>
+
+            <h2>Collapsing Round-Trips via Expressive Composition</h2>
+            <p>Code is inherently composable. It natively supports control flow primitives—<code>for</code> loops, <code>if/else</code> branches, local variables, and module imports. By generating code, an agent can perform multi-step data manipulation inside a single execution turn:</p>
+            <ul>
+                <li><strong>Turn Compression:</strong> What would require 20 discrete tool-use round-trips collapses into 1 code generation step and 1 execution return.</li>
+                <li><strong>Exact Arithmetic & Transformation:</strong> Offloads math, string manipulation, data sorting, and parsing to the runtime environment, bypassing LLM floating-point arithmetic hallucinations.</li>
+                <li><strong>Dynamic Library Integration:</strong> The agent can import standard libraries (e.g., <code>pandas</code>, <code>requests</code>, <code>json</code>) to solve unforeseen algorithmic subproblems dynamically.</li>
+            </ul>
+
+            <div class="diagram-container">
+                <svg class="react-svg" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#21262d" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="350" fill="transparent" />
+                    <rect width="650" height="350" fill="url(#grid)" opacity="0.3" rx="8" />
+
+                    <!-- Connections -->
+                    <!-- Agent -> Code Interpreter -->
+                    <path d="M 170 160 L 240 160" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-to" d="M 170 160 L 240 160" stroke="var(--primary-color)" stroke-width="1.5" />
+                    <polygon points="240,160 230,155 230,165" fill="var(--primary-color)" />
+                    <text x="205" y="145" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Write Script</text>
+
+                    <!-- Code Interpreter -> Output -->
+                    <path d="M 410 160 L 470 160" stroke="#30363d" stroke-width="2" />
+                    <path class="flow-path-to" d="M 410 160 L 470 160" stroke="#39d353" stroke-width="1.5" />
+                    <polygon points="470,160 460,155 460,165" fill="#39d353" />
+                    <text x="440" y="145" fill="#39d353" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Distilled Result</text>
+
+                    <!-- Agent Node -->
+                    <g transform="translate(40, 110)">
+                        <rect width="130" height="100" rx="8" fill="#161b22" stroke="var(--primary-color)" stroke-width="1.5" />
+                        <text x="65" y="38" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Agent Core</text>
+                        <text x="65" y="58" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Generates Script</text>
+                        <text x="65" y="76" fill="var(--primary-color)" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">Composite Action</text>
+                    </g>
+
+                    <!-- Code Interpreter Sandbox Node -->
+                    <g transform="translate(240, 110)">
+                        <rect width="170" height="100" rx="8" fill="#161b22" stroke="#58a6ff" stroke-width="2" class="active-node" />
+                        <text x="85" y="35" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="800" text-anchor="middle">Code Interpreter</text>
+                        <text x="85" y="55" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Python / JS Sandbox</text>
+                        <text x="85" y="73" fill="#39d353" font-family="'Inter', sans-serif" font-size="9" font-weight="600" text-anchor="middle">Loops & Filtering</text>
+                    </g>
+
+                    <!-- Output Node -->
+                    <g transform="translate(470, 110)">
+                        <rect width="140" height="100" rx="8" fill="#161b22" stroke="#39d353" stroke-width="1.5" />
+                        <text x="70" y="38" fill="#fff" font-family="'Inter', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Final Observation</text>
+                        <text x="70" y="58" fill="var(--secondary-color)" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Clean Summary</text>
+                        <text x="70" y="76" fill="#39d353" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">1 Turn Completed</text>
+                    </g>
+                </svg>
+            </div>
+
+            <h2>Mandatory Security Coupling with Sandboxing</h2>
+            <p>Using code as an action space significantly increases the system's attack surface. Allowing an LLM to generate and execute unrestricted shell commands or Python scripts on a host system is an existential risk. Consequently, the <strong>Code as Action</strong> pattern is tightly coupled with <strong>Sandboxing and Permissioning</strong>. The code interpreter must execute inside isolated microVMs, with restricted disk mounts and network egress controls to prevent accidental or malicious system compromise.</p>
+
+            <h2>Trade-offs</h2>
+            <p>Adopting Code as Action yields immense performance and flexibility, but introduces specific execution risks:</p>
+
+            <div class="tradeoffs-container">
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Massive Turn Compression
+                    </h4>
+                    <p>Collapses complex loops, filtering, and multi-file processing from dozens of ReAct turns into a single code generation step.</p>
+                </div>
+                <div class="tradeoff-card pro">
+                    <h4>
+                        <svg width="16" height="16" fill="#39d353" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        Exact Calculation & Parsing
+                    </h4>
+                    <p>Offloads mathematical computations, data transformations, and regex parsing to a deterministic programming language runtime.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Enlarged Attack Surface
+                    </h4>
+                    <p>Requires strict microVM sandboxing, egress proxies, and resource timeout enforcement to prevent code execution vulnerability exploitation.</p>
+                </div>
+                <div class="tradeoff-card con">
+                    <h4>
+                        <svg width="16" height="16" fill="#ff7b72" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        Silent Partial Failures
+                    </h4>
+                    <p>A script that partially succeeds (e.g. processes 10 of 20 files before crashing) can leave the environment in an inconsistent state.</p>
+                </div>
+            </div>
+
+            <h2>Known Uses</h2>
+            <p>Code as Action is widely used in state-of-the-art coding and reasoning agents:</p>
+            <ul>
+                <li><strong>CodeAct:</strong> Framework demonstrating that using executable Python code as actions improves agent task completion over structured JSON tool calling <a href="#cite-1">[1]</a>.</li>
+                <li><strong>Voyager:</strong> Minecraft agent that generates, executes, and stores verified JavaScript skills to complete complex long-horizon tasks <a href="#cite-2">[2]</a>.</li>
+                <li><strong>OpenAI Code Interpreter / Advanced Data Analysis:</strong> Native sandboxed Python interpreter mode allowing LLMs to execute code for data analysis and visualization.</li>
+            </ul>
+
+            <h2 style="margin-top: 3rem;">References</h2>
+            <ul class="citation-list">
+                <li class="citation-item" id="cite-1">
+                    <span class="citation-number">[1]</span>
+                    <div class="citation-details">
+                        Wang, X., Chen, Y., Yuan, L., Zhang, Y., Li, Y., Peng, H., & Ji, H. (2024).
+                        <strong>Executable Code Actions Elicit Better LLM Agents (CodeAct).</strong>
+                        <em>arXiv preprint arXiv:2402.01030</em>.
+                        <br><a href="https://arxiv.org/abs/2402.01030" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2402.01030</a>
+                    </div>
+                </li>
+                <li class="citation-item" id="cite-2">
+                    <span class="citation-number">[2]</span>
+                    <div class="citation-details">
+                        Wang, G., Xie, Y., Jiang, Y., Mandlekar, A., Xiao, C., Zhu, Y., Fan, L., & Anandkumar, A. (2024).
+                        <strong>Voyager: An Open-Ended Embodied Agent with Large Language Models.</strong>
+                        <em>Transactions on Machine Learning Research (TMLR)</em>.
+                        <br><a href="https://arxiv.org/abs/2305.16291" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2305.16291</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>
