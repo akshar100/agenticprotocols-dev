@@ -8,6 +8,12 @@ Exposing open standards for AI agent integration, commerce, and payments.
 - [Universal Commerce Protocol (UCP)](https://agenticprotocols.dev/ucp.html): Uniform semantic API contract for agentic catalog discovery, cart management, and checkouts.
 - [Agentic Payment Protocol (APP)](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol): Secure, autonomous stablecoin micro-payments and wallet schemas.
 
+## Open Source SDKs & Documentation
+
+- [UCP Java - Spring Boot Starter Documentation](https://ucomprotocol.dev): Official docs, User Guide (`https://ucomprotocol.dev/guide.html`), API Reference (`https://ucomprotocol.dev/api.html`), and Javadocs (`https://ucomprotocol.dev/javadocs/`) for `dev.ucomprotocol:ucp-spring-boot-starter:0.2.0` (UCP `2026-08-25`).
+- [UCP Java GitHub Repository](https://github.com/aksharprabhudesai/universal-commerce-protocol-java): Spring Boot 4 starter, Resilience4j commerce adapters, `/.well-known/ucp` discovery, and runnable MCP/REST/A2A sample storefront (`examples/ucp-example`).
+- [UCP Python SDK (ucp-py)](https://github.com/akshar100/ucp-py.git): Python UCP profile validator, CLI (`ucp-validate`), and client SDK.
+
 ## Bootcamps & Training
 
 - [5-Day Bootcamp: Generative AI & Agentic AI](https://agenticprotocols.dev/training-genai-agentic-journey.html): Mastering LLM applications, LangGraph, and multi-agent workflows.
@@ -26,6 +32,7 @@ Exposing open standards for AI agent integration, commerce, and payments.
 ### Protocols & Specifications
 - [What is the x402 Protocol?](https://agenticprotocols.dev/article-what-is-x402-protocol.html): Open micro-payment standard utilizing the HTTP 402 status code.
 - [What is Universal Commerce Protocol?](https://agenticprotocols.dev/article-what-is-universal-commerce-protocol.html): Standardized e-commerce communication for autonomous agent purchase loops.
+- [Integrating UCP: Java & Spring Boot Starter](https://agenticprotocols.dev/article-integrating-ucp-java-spring-boot.html): Developer guide for `dev.ucomprotocol:ucp-spring-boot-starter` (`https://ucomprotocol.dev`).
 - [Integrating UCP: The Python SDK](https://agenticprotocols.dev/article-integrating-ucp-python-sdk.html): Developer guide for implementing ucp-py.
 - [What are Agentic Interfaces?](https://agenticprotocols.dev/article-what-are-agentic-interfaces.html): Standardized pathways for agent-to-agent and tool-based communications.
 

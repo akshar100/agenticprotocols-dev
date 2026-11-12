@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrating UCP: Java &amp; Spring Boot Starter - Agentic Protocols</title>
+    <meta name="description" content="Learn how to build agent-ready commerce services on the JVM using the UCP Java Spring Boot Starter (dev.ucomprotocol:ucp-spring-boot-starter).">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            color: #fff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-meta-detail {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        pre {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            color: #ff7b72;
+        }
+
+        pre code {
+            color: #e6edf3;
+        }
+
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; }
+        .class-name { color: #d2a8ff; }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo" id="site-logo">Agentic Protocols</div>
+        <nav id="main-navigation">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="https://substack.com/@agenticfintech">Newsletter</a></li>
+                <li><a href="patterns.html">Patterns</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="margin-bottom: 1.5rem;">
+            <a href="ucp.html" id="back-to-ucp"
+                style="font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                ← Back to UCP Overview
+            </a>
+        </div>
+
+        <article class="article-content" id="article-integrating-ucp-java">
+            <span class="badge">Developer Guide</span>
+            <h1
+                style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; line-height: 1.2;">
+                Integrating UCP: Java &amp; Spring Boot Starter
+            </h1>
+
+            <div class="article-meta-detail">
+                <span>Published: <strong>November 11, 2026</strong></span>
+                <span>By: <strong>Akshar Prabhu Desai</strong></span>
+                <span>Read Time: <strong>6 min</strong></span>
+            </div>
+
+            <p>Enterprise commerce platforms overwhelmingly run on the JVM. To make existing Spring Boot storefronts and backend microservices immediately discoverable and operable by autonomous AI agents, we built <strong>UCP Java</strong> (<code>dev.ucomprotocol:ucp-spring-boot-starter</code>)—a Spring Boot 4 starter aligned with Universal Commerce Protocol specification <code>2026-08-25</code>.</p>
+
+            <div class="info-note">
+                <strong>Quick Links:</strong>
+                <a href="https://ucomprotocol.dev" target="_blank" rel="noopener noreferrer">Documentation Site</a> &middot;
+                <a href="https://ucomprotocol.dev/guide.html" target="_blank" rel="noopener noreferrer">User Guide</a> &middot;
+                <a href="https://ucomprotocol.dev/api.html" target="_blank" rel="noopener noreferrer">API Reference</a> &middot;
+                <a href="https://ucomprotocol.dev/javadocs/" target="_blank" rel="noopener noreferrer">Javadocs</a> &middot;
+                <a href="https://central.sonatype.com/artifact/dev.ucomprotocol/ucp-spring-boot-starter" target="_blank" rel="noopener noreferrer">Maven Central (0.2.0)</a> &middot;
+                <a href="https://github.com/aksharprabhudesai/universal-commerce-protocol-java" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+            </div>
+
+            <h2>1. Adding the Spring Boot Starter</h2>
+            <p>Published on Maven Central under <code>dev.ucomprotocol:ucp-spring-boot-starter:0.2.0</code>, the starter targets Java 17+ and Spring Boot 4.x (with <code>0.0.1</code> available for Spring Boot 3.x). Include <code>spring-boot-starter-webmvc</code> when you want automatic <code>/.well-known/ucp</code> HTTP discovery:</p>
+
+            <pre><code><span class="comment">// build.gradle</span>
+dependencies {
+    implementation <span class="string">'dev.ucomprotocol:ucp-spring-boot-starter:0.2.0'</span>
+    implementation <span class="string">'org.springframework.boot:spring-boot-starter-webmvc'</span>
+}</code></pre>
+
+            <p>Or in Maven (<code>pom.xml</code>):</p>
+
+            <pre><code>&lt;<span class="keyword">dependency</span>&gt;
+    &lt;<span class="keyword">groupId</span>&gt;dev.ucomprotocol&lt;/<span class="keyword">groupId</span>&gt;
+    &lt;<span class="keyword">artifactId</span>&gt;ucp-spring-boot-starter&lt;/<span class="keyword">artifactId</span>&gt;
+    &lt;<span class="keyword">version</span>&gt;<span class="string">0.2.0</span>&lt;/<span class="keyword">version</span>&gt;
+&lt;/<span class="keyword">dependency</span>&gt;</code></pre>
+
+            <h2>2. Unified Commerce SPI &amp; Built-in Resilience</h2>
+            <p>UCP Java decouples your business and agent-facing endpoints from vendor-specific APIs via the <code>CommerceAdapter</code> SPI and five capability sub-adapters—<code>CatalogAdapter</code>, <code>CartAdapter</code>, <code>CheckoutAdapter</code>, <code>OrderAdapter</code>, and <code>CustomerAdapter</code>—backed by clean POJOs (<code>Product</code>, <code>Cart</code>, <code>Checkout</code>, <code>Order</code>, and <code>Customer</code>).</p>
+            <p>Every registered <code>CommerceAdapter</code> bean is automatically decorated by <code>ResilientCommerceAdapter</code> with Resilience4j <code>CircuitBreaker</code> and <code>Retry</code> protection while preserving <code>null</code> capability semantics:</p>
+
+            <pre><code><span class="keyword">@Service</span>
+<span class="keyword">public class</span> <span class="class-name">AgentCheckoutService</span> {
+
+    <span class="keyword">private final</span> <span class="class-name">CommerceAdapter</span> commerceAdapter;
+
+    <span class="keyword">public</span> <span class="class-name">AgentCheckoutService</span>(<span class="class-name">CommerceAdapter</span> commerceAdapter) {
+        <span class="keyword">this</span>.commerceAdapter = commerceAdapter;
+    }
+
+    <span class="keyword">public</span> <span class="class-name">Checkout</span> purchaseSingleItem(String customerId, String productId, <span class="keyword">int</span> qty) {
+        <span class="class-name">Cart</span> cart = commerceAdapter.getCartAdapter().createCart(customerId);
+        cart = commerceAdapter.getCartAdapter().addToCart(cart.getId(), productId, qty);
+
+        <span class="class-name">Checkout</span> session = commerceAdapter.getCheckoutAdapter().createCheckout(cart);
+        <span class="keyword">return</span> commerceAdapter.getCheckoutAdapter().completeCheckout(session.getId());
+    }
+}</code></pre>
+
+            <h2>3. Dynamic Discovery at <code>/.well-known/ucp</code></h2>
+            <p>When Spring Web MVC is present, <code>UcpDiscoveryController</code> automatically inspects your <code>CommerceAdapter</code> at runtime and exposes a UCP <code>2026-08-25</code> compliant discovery profile. Any sub-adapter that returns <code>null</code> is omitted from advertised capabilities, preventing AI agents from invoking unsupported operations.</p>
+            <p>Configure your advertised transport bindings in <code>application.properties</code>:</p>
+
+            <pre><code><span class="comment"># Advertise REST, MCP, A2A, and Embedded OpenRPC transports</span>
+ucp.services.rest-endpoint=<span class="string">https://shop.example.com/ucp/v1</span>
+ucp.services.mcp-endpoint=<span class="string">https://shop.example.com/ucp/mcp</span>
+ucp.services.a2a-endpoint=<span class="string">https://shop.example.com/.well-known/agent-card.json</span>
+ucp.services.embedded-enabled=<span class="string">true</span></code></pre>
+
+            <h2>4. Testing Live with Any AI Agent</h2>
+            <p>The repository ships with a complete, stateful reference storefront in <a href="https://github.com/aksharprabhudesai/universal-commerce-protocol-java/tree/main/examples/ucp-example" target="_blank" rel="noopener noreferrer"><code>examples/ucp-example</code></a> implementing all 6 UCP capabilities (<code>catalog.search</code>, <code>catalog.lookup</code>, <code>cart</code>, <code>checkout</code>, <code>order</code>, and <code>identity_linking</code>) alongside a 16-tool <strong>MCP Streamable HTTP</strong> JSON-RPC server (<code>/ucp/mcp</code>), canonical REST endpoints (<code>/ucp/v1/*</code>), and an A2A Agent Card (<code>/.well-known/agent-card.json</code>).</p>
+
+            <pre><code><span class="comment"># 1. Start the sample storefront locally on port 8082</span>
+./gradlew -p examples/ucp-example bootRun
+
+<span class="comment"># 2. Register the MCP server with Claude Code, Cursor, Gemini CLI, or Antigravity</span>
+claude mcp add --transport http ucp-store http://localhost:8082/ucp/mcp</code></pre>
+
+            <p>Once connected, prompt any MCP or HTTP-capable AI agent in plain English:</p>
+            <ul>
+                <li><em>"Search the UCP store for coffee gear, create a cart for <code>cust-demo-01</code> with a burr grinder and two ceramic espresso cup sets, complete checkout, and give me the confirmed order ID."</em></li>
+                <li><em>"Inspect <code>http://localhost:8082/.well-known/ucp</code>, discover the merchant's capabilities and transport endpoints, and purchase a mechanical keyboard."</em></li>
+            </ul>
+
+            <h2>Next Steps</h2>
+            <p>Explore the full <a href="https://ucomprotocol.dev/guide.html" target="_blank" rel="noopener noreferrer">User Guide</a>, browse the <a href="https://ucomprotocol.dev/api.html" target="_blank" rel="noopener noreferrer">API Reference</a> and <a href="https://ucomprotocol.dev/javadocs/" target="_blank" rel="noopener noreferrer">Javadocs</a> at <a href="https://ucomprotocol.dev" target="_blank" rel="noopener noreferrer">ucomprotocol.dev</a>, or clone <a href="https://github.com/aksharprabhudesai/universal-commerce-protocol-java" target="_blank" rel="noopener noreferrer">universal-commerce-protocol-java</a> on GitHub to build your own UCP provider adapter.</p>
+        </article>
+    </main>
+
+    <footer>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
+            Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;" id="footer-ucp-py-sdk">UCP Python SDK</a>
+            <a href="https://github.com/aksharprabhudesai/universal-commerce-protocol-java" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;" id="footer-ucp-java-sdk">UCP Java SDK</a>
+            <a href="https://ucomprotocol.dev" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;" id="footer-ucp-java-docs">UCP Java Docs</a>
+            <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer" id="footer-dev-portal">Dev Portal</a>
+        </p>
+    </footer>
+</body>
+
+</html>

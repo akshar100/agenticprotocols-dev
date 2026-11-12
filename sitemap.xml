@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://agenticprotocols.dev/article-integrating-ucp-java-spring-boot.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://agenticprotocols.dev/article-integrating-ucp-python-sdk.html</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
@@ -61,6 +67,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://agenticprotocols.dev/article-multi-agent-patterns-ensembling.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://agenticprotocols.dev/article-multi-agent-patterns-handoff.html</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>monthly</changefreq>
@@ -111,6 +123,12 @@
   <url>
     <loc>https://agenticprotocols.dev/article-single-agent-patterns-search-over-actions.html</loc>
     <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://agenticprotocols.dev/article-single-agent-patterns-workflow-agentic-islands.html</loc>
+    <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

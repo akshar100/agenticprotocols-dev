@@ -72,6 +72,15 @@
 
         <section class="grid">
             <div class="card">
+                <h2>Universal Commerce Protocol (Java / Spring Boot)</h2>
+                <p>Spring Boot 4 starter (<code>dev.ucomprotocol:ucp-spring-boot-starter</code>) with unified commerce SPIs, Resilience4j fault tolerance, automatic <code>/.well-known/ucp</code> discovery, and an MCP/REST/A2A sample storefront.</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                    <a href="https://ucomprotocol.dev" target="_blank" rel="noopener noreferrer">Documentation →</a>
+                    <a href="https://github.com/aksharprabhudesai/universal-commerce-protocol-java" target="_blank" rel="noopener noreferrer">GitHub →</a>
+                    <a href="https://central.sonatype.com/artifact/dev.ucomprotocol/ucp-spring-boot-starter" target="_blank" rel="noopener noreferrer">Maven Central →</a>
+                </div>
+            </div>
+            <div class="card">
                 <h2>Universal Commerce Protocol (Python SDK)</h2>
                 <p>Access our Python implementation of the Universal Commerce Protocol for building agentic commerce applications.</p>
                 <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer">View Repository →</a>
@@ -81,6 +90,44 @@
                 <p>Explore the codebase for this website, developer documentation, and reference bootcamps/syllabi.</p>
                 <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">View Repository →</a>
             </div>
+        </section>
+
+        <section class="card" style="margin-top: 2rem; max-width: 100%; border-color: var(--primary-color);">
+            <span class="badge">Java SDK Quick Start</span>
+            <h2 style="margin-bottom: 1rem; color: #fff;">Getting Started with UCP Java (Spring Boot Starter)</h2>
+
+            <p style="color: var(--secondary-color); margin-bottom: 0.5rem;">Add the starter from Maven Central (Java 17+ &amp; Spring Boot 4.x):</p>
+            <pre><code class="language-groovy"><span class="comment">// build.gradle</span>
+dependencies {
+    implementation <span class="string">'dev.ucomprotocol:ucp-spring-boot-starter:0.2.0'</span>
+    implementation <span class="string">'org.springframework.boot:spring-boot-starter-webmvc'</span>
+}</code></pre>
+
+            <p style="color: var(--secondary-color); margin-top: 1.5rem; margin-bottom: 0.5rem;">Inject <code>CommerceAdapter</code> (auto-configured with Resilience4j &amp; UCP <code>2026-08-25</code> discovery at <code>/.well-known/ucp</code>):</p>
+            <pre><code class="language-java"><span class="keyword">@Service</span>
+<span class="keyword">public class</span> <span class="class-name">StoreService</span> {
+    <span class="keyword">private final</span> <span class="class-name">CommerceAdapter</span> commerceAdapter;
+
+    <span class="keyword">public</span> <span class="class-name">StoreService</span>(<span class="class-name">CommerceAdapter</span> commerceAdapter) {
+        <span class="keyword">this</span>.commerceAdapter = commerceAdapter;
+    }
+
+    <span class="keyword">public</span> <span class="class-name">Checkout</span> startCheckout(<span class="class-name">Cart</span> cart) {
+        <span class="keyword">return</span> commerceAdapter.getCheckoutAdapter().createCheckout(cart);
+    }
+}</code></pre>
+
+            <p style="color: var(--secondary-color); margin-top: 1.5rem; margin-bottom: 0.5rem;">Run the bundled sample storefront and connect any MCP AI agent:</p>
+            <pre><code class="language-bash">./gradlew -p examples/ucp-example bootRun
+claude mcp add --transport http ucp-store http://localhost:8082/ucp/mcp</code></pre>
+
+            <p style="margin-top: 1rem; margin-bottom: 0; font-size: 0.95rem;">
+                <a href="https://ucomprotocol.dev" target="_blank" rel="noopener noreferrer" style="margin-right: 1.25rem;">Docs (ucomprotocol.dev) →</a>
+                <a href="https://ucomprotocol.dev/guide.html" target="_blank" rel="noopener noreferrer" style="margin-right: 1.25rem;">User Guide →</a>
+                <a href="https://ucomprotocol.dev/api.html" target="_blank" rel="noopener noreferrer" style="margin-right: 1.25rem;">API Reference →</a>
+                <a href="https://ucomprotocol.dev/javadocs/" target="_blank" rel="noopener noreferrer" style="margin-right: 1.25rem;">Javadocs →</a>
+                <a href="article-integrating-ucp-java-spring-boot.html">Integration Article →</a>
+            </p>
         </section>
 
         <section class="card" style="margin-top: 2rem; max-width: 100%; border-color: var(--primary-color);">
@@ -126,6 +173,8 @@ ucp-validate -f path/to/profile.json</code></pre>
     <footer>
         <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--secondary-color);">
             Code: <a href="https://github.com/akshar100/ucp-py.git" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Python SDK</a>
+            <a href="https://github.com/aksharprabhudesai/universal-commerce-protocol-java" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Java SDK</a>
+            <a href="https://ucomprotocol.dev" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">UCP Java Docs</a>
             <a href="https://github.com/akshar100/agenticprotocols-dev" target="_blank" rel="noopener noreferrer">Dev Portal</a>
         </p>
     </footer>
